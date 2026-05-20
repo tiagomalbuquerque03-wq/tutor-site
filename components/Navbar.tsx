@@ -31,13 +31,13 @@ export default function Navbar({ c, basePath }: { c: Content["nav"]; basePath: s
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
             style={{ background: "var(--accent-blue)" }}
           >
-            T
+            C
           </div>
           <span
             className="font-bold text-lg tracking-tight"
             style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}
           >
-            Tutor IA
+            Clari
           </span>
         </Link>
 

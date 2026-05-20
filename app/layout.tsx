@@ -15,11 +15,11 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Tutor IA — O tutor de IA para alunos de 13–18 anos",
+  title: "Clari — O tutor de IA para alunos de 13–18 anos",
   description:
     "Aprende por voz, texto e foto. Método socrático. Alinhado ao ENEM e vestibular. Disponível 24h.",
   openGraph: {
-    title: "Tutor IA",
+    title: "Clari",
     description: "O tutor de IA para alunos de 13–18 anos",
     type: "website",
   },

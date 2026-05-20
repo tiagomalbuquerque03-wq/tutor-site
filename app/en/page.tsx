@@ -11,7 +11,7 @@ import DownloadCTA from "@/components/sections/DownloadCTA";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Tutor IA — AI Tutor for students aged 13–18",
+  title: "Clari — AI Tutor for students aged 13–18",
   description:
     "Learn by voice, text, and photo. Socratic method. Aligned with ENEM and vestibular. Available 24/7.",
   alternates: { canonical: "/en/" },

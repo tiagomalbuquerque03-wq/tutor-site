@@ -32,30 +32,30 @@ export const content = {
         {
           icon: "dollar",
           title: "Tutor humano custa R$80–150/h",
-          desc: "Aula particular é inacessível pra maioria. Tutor IA custa R$39,90/mês — e está sempre disponível.",
+          desc: "Aula particular é inacessível pra maioria. Clari custa R$39,90/mês — e está sempre disponível.",
         },
       ],
     },
     features: {
-      eyebrow: "Por que o Tutor é diferente",
+      eyebrow: "Por que o Clari é diferente",
       headline: "Ensina de verdade,\nem cada interação",
       items: [
         {
           tag: "01",
           title: "Conversa por voz em tempo real",
-          desc: "Fale sua dúvida como faria com um professor. O Tutor responde com ≤1,5s de latência, em português nativo.",
+          desc: "Fale sua dúvida como faria com um professor. O Clari responde com ≤1,5s de latência, em português nativo.",
           highlight: "Voz + Texto + Foto",
         },
         {
           tag: "02",
           title: "Lê sua foto do dever ou apostila",
-          desc: "Tire foto do exercício, da página do livro ou do enunciado. O Tutor analisa e guia você através do problema.",
+          desc: "Tire foto do exercício, da página do livro ou do enunciado. O Clari analisa e guia você através do problema.",
           highlight: "Claude Vision",
         },
         {
           tag: "03",
           title: "Método socrático — ensina, não entrega",
-          desc: "O Tutor nunca dá a resposta direta. Faz perguntas que te ajudam a chegar lá. Aprendizado real, não decoreba.",
+          desc: "O Clari nunca dá a resposta direta. Faz perguntas que te ajudam a chegar lá. Aprendizado real, não decoreba.",
           highlight: "Didática socrática",
         },
         {
@@ -73,12 +73,12 @@ export const content = {
         {
           num: "01",
           title: "Envie sua dúvida",
-          desc: "Por voz, texto ou foto do exercício. O Tutor entende o contexto completo.",
+          desc: "Por voz, texto ou foto do exercício. O Clari entende o contexto completo.",
         },
         {
           num: "02",
-          title: "O Tutor guia",
-          desc: "Com perguntas socráticas, o Tutor ajuda você a construir o raciocínio. Nunca te deixa só.",
+          title: "O Clari guia",
+          desc: "Com perguntas socráticas, o Clari ajuda você a construir o raciocínio. Nunca te deixa só.",
         },
         {
           num: "03",
@@ -173,15 +173,15 @@ export const content = {
       items: [
         {
           q: "O app é seguro para adolescentes?",
-          a: "Sim. O Tutor IA tem guardrails que mantêm as conversas dentro do contexto educacional. Pais podem acompanhar todas as sessões pelo portal parental. Seguimos a LGPD com consentimento parental para menores de 18 anos.",
+          a: "Sim. O Clari tem guardrails que mantêm as conversas dentro do contexto educacional. Pais podem acompanhar todas as sessões pelo portal parental. Seguimos a LGPD com consentimento parental para menores de 18 anos.",
         },
         {
           q: "O app entrega as respostas dos exercícios?",
-          a: "Não — e isso é intencional. O Tutor usa o método socrático: guia você até a resposta com perguntas, nunca a entrega diretamente. Alunos que testaram aprendem muito mais assim.",
+          a: "Não — e isso é intencional. O Clari usa o método socrático: guia você até a resposta com perguntas, nunca a entrega diretamente. Alunos que testaram aprendem muito mais assim.",
         },
         {
           q: "Funciona com o material do meu colégio?",
-          a: "Sim. Você pode fotografar qualquer página de livro, apostila ou caderno. O Tutor analisa o conteúdo e adapta a explicação ao que está no material.",
+          a: "Sim. Você pode fotografar qualquer página de livro, apostila ou caderno. O Clari analisa o conteúdo e adapta a explicação ao que está no material.",
         },
         {
           q: "Como os pais acompanham o uso?",
@@ -189,7 +189,7 @@ export const content = {
         },
         {
           q: "Qual é a diferença para o ChatGPT?",
-          a: "O ChatGPT é um chatbot genérico que entrega respostas diretas. O Tutor IA é especializado em K-12 brasileiro, alinhado ao ENEM, usa método socrático, e mantém o currículo do aluno em memória. São produtos completamente diferentes.",
+          a: "O ChatGPT é um chatbot genérico que entrega respostas diretas. O Clari é especializado em K-12 brasileiro, alinhado ao ENEM, usa método socrático, e mantém o currículo do aluno em memória. São produtos completamente diferentes.",
         },
       ],
     },
@@ -209,7 +209,7 @@ export const content = {
         { label: "Privacidade", href: "#" },
         { label: "Contato", href: "mailto:contato@tutorai.app" },
       ],
-      copy: `© ${new Date().getFullYear()} Tutor IA. Todos os direitos reservados.`,
+      copy: `© ${new Date().getFullYear()} Clari. Todos os direitos reservados.`,
     },
   },
   en: {
@@ -245,30 +245,30 @@ export const content = {
         {
           icon: "dollar",
           title: "Human tutors cost R$80–150/h",
-          desc: "Private tutoring is out of reach for most. Tutor IA costs R$39.90/month — and is always available.",
+          desc: "Private tutoring is out of reach for most. Clari costs R$39.90/month — and is always available.",
         },
       ],
     },
     features: {
-      eyebrow: "Why Tutor IA is different",
+      eyebrow: "Why Clari is different",
       headline: "Real teaching\nin every interaction",
       items: [
         {
           tag: "01",
           title: "Real-time voice conversation",
-          desc: "Ask your question like you would a teacher. Tutor responds in ≤1.5s latency, in your native language.",
+          desc: "Ask your question like you would a teacher. Clari responds in ≤1.5s latency, in your native language.",
           highlight: "Voice + Text + Photo",
         },
         {
           tag: "02",
           title: "Reads your homework photo",
-          desc: "Snap a photo of your exercise, textbook page, or exam question. Tutor analyzes and guides you through.",
+          desc: "Snap a photo of your exercise, textbook page, or exam question. Clari analyzes and guides you through.",
           highlight: "Claude Vision",
         },
         {
           tag: "03",
           title: "Socratic method — teaches, doesn't answer",
-          desc: "Tutor never gives direct answers. It asks questions that help you arrive there yourself. Real learning, not rote.",
+          desc: "Clari never gives direct answers. It asks questions that help you arrive there yourself. Real learning, not rote.",
           highlight: "Socratic teaching",
         },
         {
@@ -286,12 +286,12 @@ export const content = {
         {
           num: "01",
           title: "Ask your question",
-          desc: "By voice, text, or homework photo. Tutor understands the full context.",
+          desc: "By voice, text, or homework photo. Clari understands the full context.",
         },
         {
           num: "02",
-          title: "Tutor guides you",
-          desc: "With Socratic questions, Tutor helps you build the reasoning. Never leaves you stuck.",
+          title: "Clari guides you",
+          desc: "With Socratic questions, Clari helps you build the reasoning. Never leaves you stuck.",
         },
         {
           num: "03",
@@ -386,15 +386,15 @@ export const content = {
       items: [
         {
           q: "Is the app safe for teenagers?",
-          a: "Yes. Tutor IA has guardrails that keep conversations within educational context. Parents can monitor all sessions via the parental portal. We comply with LGPD with parental consent for users under 18.",
+          a: "Yes. Clari has guardrails that keep conversations within educational context. Parents can monitor all sessions via the parental portal. We comply with LGPD with parental consent for users under 18.",
         },
         {
           q: "Does the app give homework answers?",
-          a: "No — and that's intentional. Tutor uses the Socratic method: guides you to the answer with questions, never gives it directly. Students in our research learned significantly more this way.",
+          a: "No — and that's intentional. Clari uses the Socratic method: guides you to the answer with questions, never gives it directly. Students in our research learned significantly more this way.",
         },
         {
           q: "Does it work with my school's materials?",
-          a: "Yes. You can photograph any textbook page, handout, or notebook. Tutor analyzes the content and adapts the explanation to what's in your materials.",
+          a: "Yes. You can photograph any textbook page, handout, or notebook. Clari analyzes the content and adapts the explanation to what's in your materials.",
         },
         {
           q: "How do parents track usage?",
@@ -402,7 +402,7 @@ export const content = {
         },
         {
           q: "How is this different from ChatGPT?",
-          a: "ChatGPT is a generic chatbot that delivers direct answers. Tutor IA is specialized for Brazilian K-12, aligned with ENEM, uses the Socratic method, and maintains the student's curriculum in memory. Completely different products.",
+          a: "ChatGPT is a generic chatbot that delivers direct answers. Clari is specialized for Brazilian K-12, aligned with ENEM, uses the Socratic method, and maintains the student's curriculum in memory. Completely different products.",
         },
       ],
     },
@@ -422,7 +422,7 @@ export const content = {
         { label: "Privacy", href: "#" },
         { label: "Contact", href: "mailto:contact@tutorai.app" },
       ],
-      copy: `© ${new Date().getFullYear()} Tutor IA. All rights reserved.`,
+      copy: `© ${new Date().getFullYear()} Clari. All rights reserved.`,
     },
   },
 };

@@ -10,11 +10,11 @@ export default function Footer({ c }: { c: Content["footer"] }) {
             className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs"
             style={{ background: "var(--accent-blue)" }}
           >
-            T
+            C
           </div>
           <div>
             <p className="font-semibold text-sm" style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}>
-              Tutor IA
+              Clari
             </p>
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>{c.tagline}</p>
           </div>
