@@ -7,7 +7,8 @@ import type { Content } from "@/lib/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default function DownloadCTA({ c }: { c: Content["cta"] }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -32,14 +33,17 @@ export default function DownloadCTA({ c }: { c: Content["cta"] }) {
     if (!platform || !email) return;
     setStatus("loading");
     try {
-      if (ENDPOINT) {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ email, platform }),
-        });
-        if (!res.ok) throw new Error();
-      }
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY!,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify({ email, platform }),
+      });
+      if (!res.ok) throw new Error();
       setStatus("success");
     } catch {
       setStatus("error");
