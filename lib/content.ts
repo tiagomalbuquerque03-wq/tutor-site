@@ -276,9 +276,9 @@ export const content = {
         },
         {
           tag: "04",
-          title: "Aligned with ENEM & vestibular",
-          desc: "31 canonical subjects, 280 mapped topics. Exercises styled after the exams that actually matter in Brazil.",
-          highlight: "ENEM + Vestibular",
+          title: "Built for Brazilian students — ENEM & vestibular",
+          desc: "For students in Brazil: 31 canonical subjects, 280 mapped topics, exercises styled after the exams that matter. Canadian curriculum coming soon.",
+          highlight: "🇧🇷 Brazil · ENEM + Vestibular",
         },
       ],
     },
