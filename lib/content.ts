@@ -8,7 +8,7 @@ export const content = {
     hero: {
       badge: "Tutor de IA para o ENEM e vestibular",
       headline: ["O tutor que explica,", "nunca entrega."],
-      sub: "Aprende no seu ritmo, por voz, texto ou foto. Socrático por natureza — disponível às 23h quando você mais precisa.",
+      sub: "Aprende no seu ritmo, por voz, texto ou foto. Socrático por natureza — disponível 24 horas sempre que você precisar.",
       cta: "Baixar grátis",
       ctaSub: "Sem cartão de crédito",
       stat1: { value: "4,24★", label: "avaliação dos alunos" },
@@ -224,7 +224,7 @@ export const content = {
     hero: {
       badge: "AI Tutor for Brazilian students",
       headline: ["The tutor that teaches,", "never just answers."],
-      sub: "Learn by voice, text, and photo. Socratic by design — available at 11pm when you need it most.",
+      sub: "Learn at your own pace, by voice, text or photo. Socratic by design — available 24 hours whenever you need it.",
       cta: "Download Free",
       ctaSub: "No credit card required",
       stat1: { value: "4.24★", label: "student rating" },

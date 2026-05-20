@@ -79,7 +79,7 @@ export default function Navbar({
             <img src={`${basePath}/clari-icon.png`} alt="Clari" className="w-11 h-11 rounded-2xl" />
             <span
               className="font-bold text-xl tracking-tight"
-              style={{ fontFamily: "var(--font-poppins)", color: "#fff" }}
+              style={{ fontFamily: "'Poppins', sans-serif", color: "#fff" }}
             >
               clari
             </span>

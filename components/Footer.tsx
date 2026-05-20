@@ -14,7 +14,7 @@ export default function Footer({ c }: { c: Content["footer"] }) {
             className="w-10 h-10 rounded-2xl"
           />
           <div>
-            <p className="font-bold text-sm" style={{ fontFamily: "var(--font-poppins)", color: "var(--text-primary)" }}>
+            <p className="font-bold text-sm" style={{ fontFamily: "'Poppins', sans-serif", color: "var(--text-primary)" }}>
               clari
             </p>
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>{c.tagline}</p>
