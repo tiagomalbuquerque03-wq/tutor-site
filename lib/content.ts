@@ -50,7 +50,7 @@ export const content = {
           tag: "02",
           title: "Lê sua foto do dever ou apostila",
           desc: "Tire foto do exercício, da página do livro ou do enunciado. O Clari analisa e guia você através do problema.",
-          highlight: "Claude Vision",
+          highlight: "Leitura visual",
         },
         {
           tag: "03",
@@ -263,7 +263,7 @@ export const content = {
           tag: "02",
           title: "Reads your homework photo",
           desc: "Snap a photo of your exercise, textbook page, or exam question. Clari analyzes and guides you through.",
-          highlight: "Claude Vision",
+          highlight: "Leitura visual",
         },
         {
           tag: "03",
