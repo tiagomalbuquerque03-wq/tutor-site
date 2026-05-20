@@ -78,7 +78,7 @@ export default function Navbar({
           <Link href={`${basePath}/`} className="flex items-center gap-2.5 group">
             <img src={`${basePath}/clari-icon.png`} alt="Clari" className="w-11 h-11 rounded-2xl" />
             <span
-              className="font-bold text-xl tracking-tight"
+              className="font-bold text-3xl tracking-tight"
               style={{ fontFamily: "'Nunito', system-ui, sans-serif", color: "#fff" }}
             >
               clari
