@@ -8,7 +8,7 @@ export const content = {
     hero: {
       badge: "Tutor de IA para o ENEM e vestibular",
       headline: ["O tutor que explica,", "nunca entrega."],
-      sub: "Aprende contigo por voz, texto e foto. Socrático por natureza — disponível às 23h quando você mais precisa.",
+      sub: "Aprende no seu ritmo, por voz, texto ou foto. Socrático por natureza — disponível às 23h quando você mais precisa.",
       cta: "Baixar grátis",
       ctaSub: "Sem cartão de crédito",
       stat1: { value: "4,24★", label: "avaliação dos alunos" },
