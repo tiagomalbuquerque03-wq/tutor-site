@@ -33,10 +33,10 @@ export default function Navbar({ c, basePath }: { c: Content["nav"]; basePath: s
             className="w-11 h-11 rounded-2xl"
           />
           <span
-            className="font-bold text-lg tracking-tight"
-            style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}
+            className="font-bold text-xl tracking-tight"
+            style={{ fontFamily: "var(--font-poppins)", color: "#fff" }}
           >
-            Clari
+            clari
           </span>
         </Link>
 

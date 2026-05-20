@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans } from "next/font/google";
+import { Space_Grotesk, DM_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -11,6 +11,13 @@ const spaceGrotesk = Space_Grotesk({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -31,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${spaceGrotesk.variable} ${dmSans.variable}`}
+      className={`${spaceGrotesk.variable} ${dmSans.variable} ${poppins.variable}`}
     >
       <body className="min-h-screen flex flex-col">{children}</body>
     </html>
