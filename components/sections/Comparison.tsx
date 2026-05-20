@@ -14,8 +14,8 @@ const copy = {
   pt: {
     eyebrow: "A diferença que muda tudo",
     headline: ["A mesma pergunta.", "Dois resultados."],
-    leftLabel: "ChatGPT / Brainly / Photomath",
-    rightLabel: "Tutor IA",
+    leftLabel: "ChatGPT",
+    rightLabel: "Clari",
     leftBadge: "✗ Resposta copiada",
     leftSub: "Memorizou por 1 hora. Errou na prova.",
     rightBadge: "✓ Conceito aprendido",
@@ -33,13 +33,13 @@ const copy = {
       { role: "tutor", text: "Perfeito. E agora você sabe o porquê de cada número. 🎯" },
     ],
     note: "Alunos que aprendem pela descoberta retêm o conteúdo 6× mais.",
-    source: "Pesquisa Tutor IA com 17 alunos BR, abr/2026",
+    source: "Pesquisa Clari com 17 alunos BR, abr/2026",
   },
   en: {
     eyebrow: "The difference that changes everything",
     headline: ["Same question.", "Two outcomes."],
-    leftLabel: "ChatGPT / Brainly / Photomath",
-    rightLabel: "Tutor IA",
+    leftLabel: "ChatGPT",
+    rightLabel: "Clari",
     leftBadge: "✗ Answer copied",
     leftSub: "Memorized for 1 hour. Failed the test.",
     rightBadge: "✓ Concept mastered",
@@ -57,7 +57,7 @@ const copy = {
       { role: "tutor", text: "Perfect. Now you know the WHY behind every number. 🎯" },
     ],
     note: "Students who learn by discovery retain content 6× longer.",
-    source: "Tutor IA research with 17 Brazilian students, Apr 2026",
+    source: "Clari research with 17 Brazilian students, Apr 2026",
   },
 };
 

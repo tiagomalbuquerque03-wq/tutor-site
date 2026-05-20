@@ -6,11 +6,11 @@ type Lang = "pt" | "en";
 
 const copy = {
   pt: {
-    otherLabel: "ChatGPT / Brainly",
-    tutorLabel: "Tutor IA",
+    otherLabel: "ChatGPT",
+    tutorLabel: "Clari",
     resultBad: "Resposta copiada. Esquece em 1h.",
     resultGood: "Conceito aprendido. Fica na prova.",
-    voicePlaceholder: "Falar com o Tutor…",
+    voicePlaceholder: "Falar com o Clari…",
     otherChat: [
       { role: "user", text: "F₁=10N e F₂=6N em sentidos opostos. Resultante?" },
       { role: "ai",   text: "A força resultante é 4N no sentido de F₁. (F = 10−6 = 4N) ✓" },
@@ -24,11 +24,11 @@ const copy = {
     ],
   },
   en: {
-    otherLabel: "ChatGPT / Brainly",
-    tutorLabel: "Tutor IA",
+    otherLabel: "ChatGPT",
+    tutorLabel: "Clari",
     resultBad: "Answer copied. Forgotten in 1h.",
     resultGood: "Concept mastered. Sticks for the test.",
-    voicePlaceholder: "Talk to Tutor…",
+    voicePlaceholder: "Talk to Clari…",
     otherChat: [
       { role: "user", text: "F₁=10N and F₂=6N in opposite directions. Resultant?" },
       { role: "ai",   text: "The resultant force is 4N in the direction of F₁. (F = 10−6 = 4N) ✓" },
@@ -148,7 +148,7 @@ export default function AppMockup({ lang = "pt" }: { lang?: Lang }) {
           </div>
         )}
 
-        {/* ── Section 2: Tutor IA ── */}
+        {/* ── Section 2: Clari ── */}
         {phase !== "other" && (
           <div
             className="mx-3 rounded-xl overflow-hidden flex-1 flex flex-col"
