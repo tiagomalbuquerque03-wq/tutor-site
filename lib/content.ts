@@ -37,25 +37,25 @@ export const content = {
       ],
     },
     features: {
-      eyebrow: "Por que o Clari é diferente",
+      eyebrow: "Por que a Clari é diferente",
       headline: "Ensina de verdade,\nem cada interação",
       items: [
         {
           tag: "01",
           title: "Conversa por voz em tempo real",
-          desc: "Fale sua dúvida como faria com um professor. O Clari responde com ≤1,5s de latência, em português nativo.",
+          desc: "Fale sua dúvida como faria com um professor. A Clari responde com ≤1,5s de latência, em português nativo.",
           highlight: "Voz + Texto + Foto",
         },
         {
           tag: "02",
           title: "Lê sua foto do dever ou apostila",
-          desc: "Tire foto do exercício, da página do livro ou do enunciado. O Clari analisa e guia você através do problema.",
+          desc: "Tire foto do exercício, da página do livro ou do enunciado. A Clari analisa e guia você através do problema.",
           highlight: "Leitura visual",
         },
         {
           tag: "03",
           title: "Método socrático — ensina, não entrega",
-          desc: "O Clari nunca dá a resposta direta. Faz perguntas que te ajudam a chegar lá. Aprendizado real, não decoreba.",
+          desc: "A Clari nunca dá a resposta direta. Faz perguntas que te ajudam a chegar lá. Aprendizado real, não decoreba.",
           highlight: "Didática socrática",
         },
         {
@@ -73,12 +73,12 @@ export const content = {
         {
           num: "01",
           title: "Envie sua dúvida",
-          desc: "Por voz, texto ou foto do exercício. O Clari entende o contexto completo.",
+          desc: "Por voz, texto ou foto do exercício. A Clari entende o contexto completo.",
         },
         {
           num: "02",
-          title: "O Clari guia",
-          desc: "Com perguntas socráticas, o Clari ajuda você a construir o raciocínio. Nunca te deixa só.",
+          title: "A Clari guia",
+          desc: "Com perguntas socráticas, a Clari ajuda você a construir o raciocínio. Nunca te deixa só.",
         },
         {
           num: "03",
@@ -173,15 +173,15 @@ export const content = {
       items: [
         {
           q: "O app é seguro para adolescentes?",
-          a: "Sim. O Clari tem guardrails que mantêm as conversas dentro do contexto educacional. Pais podem acompanhar todas as sessões pelo portal parental. Seguimos a LGPD com consentimento parental para menores de 18 anos.",
+          a: "Sim. A Clari tem guardrails que mantêm as conversas dentro do contexto educacional. Pais podem acompanhar todas as sessões pelo portal parental. Seguimos a LGPD com consentimento parental para menores de 18 anos.",
         },
         {
           q: "O app entrega as respostas dos exercícios?",
-          a: "Não — e isso é intencional. O Clari usa o método socrático: guia você até a resposta com perguntas, nunca a entrega diretamente. Alunos que testaram aprendem muito mais assim.",
+          a: "Não — e isso é intencional. A Clari usa o método socrático: guia você até a resposta com perguntas, nunca a entrega diretamente. Alunos que testaram aprendem muito mais assim.",
         },
         {
           q: "Funciona com o material do meu colégio?",
-          a: "Sim. Você pode fotografar qualquer página de livro, apostila ou caderno. O Clari analisa o conteúdo e adapta a explicação ao que está no material.",
+          a: "Sim. Você pode fotografar qualquer página de livro, apostila ou caderno. A Clari analisa o conteúdo e adapta a explicação ao que está no material.",
         },
         {
           q: "Como os pais acompanham o uso?",
@@ -189,19 +189,19 @@ export const content = {
         },
         {
           q: "Qual é a diferença para o ChatGPT?",
-          a: "O ChatGPT é um chatbot genérico que entrega respostas diretas. O Clari é especializado em K-12 brasileiro, alinhado ao ENEM, usa método socrático, e mantém o currículo do aluno em memória. São produtos completamente diferentes.",
+          a: "O ChatGPT é um chatbot genérico que entrega respostas diretas. A Clari é especializada em K-12 brasileiro, alinhada ao ENEM, usa método socrático, e mantém o currículo do aluno em memória. São produtos completamente diferentes.",
         },
       ],
     },
     cta: {
       headline: "Seja o primeiro a saber",
-      sub: "O Clari chega em breve. Escolha a sua plataforma e deixe o e-mail — te avisamos quando estiver disponível.",
+      sub: "A Clari chega em breve. Escolha a sua plataforma e deixe o e-mail — te avisamos quando estiver disponível.",
       iosLabel: "iPhone",
       androidLabel: "Android",
       emailPlaceholder: "seu@email.com",
       submit: "Quero ser avisado",
       successTitle: "Anotado!",
-      successSub: "Você será o primeiro a saber quando o Clari chegar.",
+      successSub: "Você será o primeiro a saber quando a Clari chegar.",
       note: "iOS e Android chegam em datas diferentes.",
       errorMsg: "Algo deu errado. Tente de novo.",
     },
