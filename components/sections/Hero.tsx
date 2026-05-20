@@ -95,32 +95,6 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
               {c.sub}
             </motion.p>
 
-            {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.28 }}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-16"
-            >
-              <a
-                href="#download"
-                className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl font-semibold text-base transition-all hover:opacity-90 active:scale-95"
-                style={{
-                  background: "var(--accent-blue)",
-                  color: "#fff",
-                  fontFamily: "var(--font-space-grotesk)",
-                  boxShadow: "0 8px 40px rgba(58,130,255,0.4)",
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" fill="white" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-                {c.cta}
-              </a>
-              <p className="text-sm" style={{ color: "var(--text-muted)" }}>{c.ctaSub}</p>
-            </motion.div>
-
             {/* Stats */}
             <motion.div
               initial={{ opacity: 0 }}
