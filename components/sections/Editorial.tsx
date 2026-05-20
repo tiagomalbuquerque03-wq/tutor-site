@@ -13,12 +13,12 @@ interface Props {
 const copy = {
   pt: {
     quote: "Aprender não é copiar a resposta.",
-    sub: "É construir o raciocínio que nenhuma IA pode fazer por você — mas que o Tutor te ajuda a descobrir.",
+    sub: "É construir o raciocínio que nenhuma IA pode fazer por você — mas que a Clari te ajuda a descobrir.",
     tag: "Método socrático",
   },
   en: {
     quote: "Learning isn't copying the answer.",
-    sub: "It's building the reasoning that no AI can do for you — but that Tutor helps you discover.",
+    sub: "It's building the reasoning that no AI can do for you — but that Clari helps you discover.",
     tag: "Socratic method",
   },
 };
