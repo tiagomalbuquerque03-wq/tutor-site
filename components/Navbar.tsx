@@ -27,12 +27,11 @@ export default function Navbar({ c, basePath }: { c: Content["nav"]; basePath: s
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href={`${basePath}/`} className="flex items-center gap-2.5 group">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-            style={{ background: "var(--accent-blue)" }}
-          >
-            C
-          </div>
+          <img
+            src={`${basePath}/clari-icon.png`}
+            alt="Clari"
+            className="w-11 h-11 rounded-2xl"
+          />
           <span
             className="font-bold text-lg tracking-tight"
             style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}
