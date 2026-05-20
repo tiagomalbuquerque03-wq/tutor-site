@@ -1,7 +1,9 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
 :root {
+  --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+  --font-nunito: 'Nunito', system-ui, sans-serif;
   --bg: #06090f;
   --bg-surface: #0a0f1c;
   --bg-card: #0d1220;
@@ -22,8 +24,8 @@
   --color-emerald: var(--accent-emerald);
   --color-text: var(--text-primary);
   --color-muted: var(--text-muted);
-  --font-sans: var(--font-dm-sans);
-  --font-display: var(--font-space-grotesk);
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
 }
 
 html {

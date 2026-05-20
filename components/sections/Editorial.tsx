@@ -49,7 +49,7 @@ export default function Editorial({ lang }: Props) {
         src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1920&q=85&auto=format&fit=crop"
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: "brightness(0.22) saturate(0.6)" }}
+        style={{ filter: "brightness(0.38) saturate(0.7)" }}
       />
 
       {/* Overlays */}
@@ -57,7 +57,7 @@ export default function Editorial({ lang }: Props) {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, rgba(6,9,15,0.9) 0%, rgba(6,9,15,0.6) 50%, rgba(58,130,255,0.08) 100%)",
+            "linear-gradient(135deg, rgba(6,9,15,0.72) 0%, rgba(6,9,15,0.45) 50%, rgba(58,130,255,0.08) 100%)",
         }}
       />
       <div
