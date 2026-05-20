@@ -1,11 +1,10 @@
 import { content } from "@/lib/content";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
-import Problem from "@/components/sections/Problem";
+import Comparison from "@/components/sections/Comparison";
+import Editorial from "@/components/sections/Editorial";
 import Features from "@/components/sections/Features";
-import HowItWorks from "@/components/sections/HowItWorks";
 import SocialProof from "@/components/sections/SocialProof";
-import Pricing from "@/components/sections/Pricing";
 import FAQ from "@/components/sections/FAQ";
 import DownloadCTA from "@/components/sections/DownloadCTA";
 import Footer from "@/components/Footer";
@@ -15,14 +14,13 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function Home() {
   return (
-    <main>
+    <main className="grain">
       <Navbar c={c.nav} basePath={basePath} />
-      <Hero c={c.hero} />
-      <Problem c={c.problem} />
+      <Hero c={c.hero} lang="pt" />
+      <Comparison lang="pt" />
       <Features c={c.features} />
-      <HowItWorks c={c.howItWorks} />
+      <Editorial lang="pt" />
       <SocialProof c={c.social} />
-      <Pricing c={c.pricing} />
       <FAQ c={c.faq} />
       <DownloadCTA c={c.cta} />
       <Footer c={c.footer} />

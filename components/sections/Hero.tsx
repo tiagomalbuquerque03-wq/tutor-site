@@ -5,67 +5,79 @@ import { motion } from "framer-motion";
 import AppMockup from "@/components/AppMockup";
 import type { Content } from "@/lib/content";
 
-export default function Hero({ c }: { c: Content["hero"] }) {
-  const bgRef = useRef<HTMLDivElement>(null);
+export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "pt" | "en" }) {
+  const photoRef = useRef<HTMLDivElement>(null);
 
+  // Subtle parallax on photo
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      if (!bgRef.current) return;
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      bgRef.current.style.background = `radial-gradient(ellipse at ${x}% ${y}%, rgba(58,130,255,0.12) 0%, transparent 60%)`;
+    const onScroll = () => {
+      if (!photoRef.current) return;
+      const y = window.scrollY * 0.35;
+      photoRef.current.style.transform = `translateY(${y}px)`;
     };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden dot-grid">
-      {/* Interactive gradient layer */}
-      <div ref={bgRef} className="absolute inset-0 transition-all duration-500 pointer-events-none" />
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* ── Background photo ── */}
+      <div ref={photoRef} className="absolute inset-0 will-change-transform">
+        <img
+          src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=1920&q=85&auto=format&fit=crop"
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ filter: "brightness(0.28) saturate(0.7)" }}
+        />
+      </div>
 
-      {/* Top radial glow */}
+      {/* Gradient overlays */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at top, rgba(58,130,255,0.15) 0%, transparent 70%)" }}
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(6,9,15,0.97) 0%, rgba(6,9,15,0.7) 55%, rgba(6,9,15,0.5) 100%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 right-0 h-40"
+        style={{ background: "linear-gradient(to bottom, transparent, var(--bg))" }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-16 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      {/* Blue accent glow left */}
+      <div
+        className="absolute top-1/3 left-0 w-96 h-96 blur-3xl pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(58,130,255,0.12) 0%, transparent 70%)" }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16 w-full">
+        <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-center">
           {/* Left — copy */}
-          <div>
+          <div className="max-w-2xl">
             {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-8"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-10"
               style={{
-                background: "rgba(58,130,255,0.12)",
-                border: "1px solid rgba(58,130,255,0.3)",
+                background: "rgba(58,130,255,0.1)",
+                border: "1px solid rgba(58,130,255,0.25)",
                 color: "#60A5FA",
                 fontFamily: "var(--font-space-grotesk)",
               }}
             >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: "var(--accent-blue)" }}
-              />
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--accent-blue)" }} />
               {c.badge}
             </motion.div>
 
-            {/* Headline */}
+            {/* Main headline — HUGE */}
             <motion.h1
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="leading-[1.05] mb-6"
-              style={{
-                fontFamily: "var(--font-space-grotesk)",
-                fontWeight: 700,
-                fontSize: "clamp(2.8rem, 5.5vw, 4.5rem)",
-                color: "var(--text-primary)",
-              }}
+              transition={{ duration: 0.65, delay: 0.08 }}
+              className="display-xl mb-8"
+              style={{ color: "var(--text-primary)" }}
             >
               {c.headline[0]}
               <br />
@@ -76,8 +88,8 @@ export default function Hero({ c }: { c: Content["hero"] }) {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg leading-relaxed mb-10 max-w-lg"
+              transition={{ duration: 0.6, delay: 0.18 }}
+              className="text-lg leading-relaxed mb-12 max-w-xl"
               style={{ color: "var(--text-muted)" }}
             >
               {c.sub}
@@ -87,17 +99,17 @@ export default function Hero({ c }: { c: Content["hero"] }) {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-14"
+              transition={{ duration: 0.5, delay: 0.28 }}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-16"
             >
               <a
                 href="#download"
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-semibold text-base transition-all hover:opacity-90 active:scale-95"
+                className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl font-semibold text-base transition-all hover:opacity-90 active:scale-95"
                 style={{
                   background: "var(--accent-blue)",
                   color: "#fff",
                   fontFamily: "var(--font-space-grotesk)",
-                  boxShadow: "0 8px 32px rgba(58,130,255,0.35)",
+                  boxShadow: "0 8px 40px rgba(58,130,255,0.4)",
                 }}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -106,22 +118,20 @@ export default function Hero({ c }: { c: Content["hero"] }) {
                 </svg>
                 {c.cta}
               </a>
-              <span className="text-sm" style={{ color: "var(--text-muted)" }}>
-                {c.ctaSub}
-              </span>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>{c.ctaSub}</p>
             </motion.div>
 
-            {/* Stats row */}
+            {/* Stats */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-              className="flex flex-wrap gap-8"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-wrap gap-10"
             >
               {[c.stat1, c.stat2, c.stat3].map((s, i) => (
                 <div key={i}>
                   <p
-                    className="text-2xl font-bold leading-none mb-1"
+                    className="text-3xl font-bold mb-1"
                     style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}
                   >
                     {s.value}
@@ -132,23 +142,27 @@ export default function Hero({ c }: { c: Content["hero"] }) {
             </motion.div>
           </div>
 
-          {/* Right — phone mockup */}
+          {/* Right — phone */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex justify-center lg:justify-end animate-float"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="hidden lg:flex justify-end animate-float"
           >
-            <AppMockup />
+            <AppMockup lang={lang} />
           </motion.div>
         </div>
-      </div>
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, var(--bg))" }}
-      />
+        {/* Mobile phone */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="flex lg:hidden justify-center mt-12"
+        >
+          <AppMockup lang={lang} />
+        </motion.div>
+      </div>
     </section>
   );
 }

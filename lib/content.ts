@@ -196,7 +196,9 @@ export const content = {
     cta: {
       headline: "Comece grátis hoje",
       sub: "5 minutos para configurar. Resultado desde a primeira conversa.",
+      androidPrefix: "Em breve no",
       android: "Google Play",
+      iosPrefix: "Em breve na",
       ios: "App Store",
       soon: "Em breve nas lojas",
     },
@@ -407,7 +409,9 @@ export const content = {
     cta: {
       headline: "Start free today",
       sub: "5 minutes to set up. Results from the first conversation.",
+      androidPrefix: "Coming soon to",
       android: "Google Play",
+      iosPrefix: "Coming soon to",
       ios: "App Store",
       soon: "Coming soon to app stores",
     },
