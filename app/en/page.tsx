@@ -23,7 +23,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export default function EnglishPage() {
   return (
     <main className="grain">
-      <Navbar c={c.nav} basePath={basePath} />
+      <Navbar c={c.nav} cta={c.cta} basePath={basePath} />
       <Hero c={c.hero} lang="en" />
       <Comparison lang="en" />
       <Features c={c.features} />
