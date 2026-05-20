@@ -27,7 +27,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
           src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=1920&q=85&auto=format&fit=crop"
           alt=""
           className="w-full h-full object-cover"
-          style={{ filter: "brightness(0.28) saturate(0.7)" }}
+          style={{ filter: "brightness(0.45) saturate(0.8)" }}
         />
       </div>
 
@@ -36,7 +36,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to right, rgba(6,9,15,0.97) 0%, rgba(6,9,15,0.7) 55%, rgba(6,9,15,0.5) 100%)",
+            "linear-gradient(to right, rgba(6,9,15,0.82) 0%, rgba(6,9,15,0.55) 55%, rgba(6,9,15,0.35) 100%)",
         }}
       />
       <div
