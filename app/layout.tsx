@@ -8,9 +8,9 @@ import "@fontsource/nunito/900.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Clari — O tutor de IA para alunos de 13–18 anos",
+  title: "Clari — Entende o que o aluno precisa estudar.",
   description:
-    "Aprende por voz, texto e foto. Método socrático. Alinhado ao ENEM e vestibular. Disponível 24h.",
+    "IA por voz que lê o material real do aluno, identifica pontos fracos e organiza o estudo. Disponível 24h.",
   openGraph: {
     title: "Clari",
     description: "O tutor de IA para alunos de 13–18 anos",

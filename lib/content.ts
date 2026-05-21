@@ -7,7 +7,7 @@ export const content = {
     },
     hero: {
       badge: "Tutor de IA para o ENEM e vestibular",
-      headline: ["Lê sua prova.", "Descobre o que falta."],
+      headline: ["IA por voz que organiza o estudo", "a partir do material real do aluno."],
       sub: "A Clari é um tutor por voz que lê sua prova, identifica onde você trava e organiza o estudo nos seus pontos mais fracos — tudo em diálogo natural.",
       cta: "Baixar grátis",
       ctaSub: "Sem cartão de crédito",
