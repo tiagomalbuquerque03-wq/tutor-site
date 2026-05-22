@@ -250,6 +250,7 @@
         <div class="nav-item" onclick="goTo('pais')"><span class="nav-icon">👨‍👩‍👧</span>Pais <span class="nav-badge" id="badge-pais">—</span></div>
         <div class="nav-item" onclick="goTo('familia')"><span class="nav-icon">🔗</span>Família</div>
         <div class="nav-item" onclick="goTo('subscricoes')"><span class="nav-icon">💳</span>Subscrições</div>
+        <div class="nav-item" onclick="goTo('waitlist')"><span class="nav-icon">⏳</span>Waitlist <span class="nav-badge" id="badge-waitlist">—</span></div>
 
         <div class="nav-group">Monitoramento</div>
         <div class="nav-item" onclick="goTo('piloto')"><span class="nav-icon">🎯</span>Piloto</div>
@@ -361,6 +362,20 @@
               <span>Aluno</span><span>Plano</span><span>Status</span><span>Moeda</span><span>Valor</span><span>Expira</span><span>Provider</span>
             </div>
             <div id="sub-list"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- WAITLIST -->
+        <div class="page" id="page-waitlist">
+          <div class="stats-row cols-2" style="margin-bottom:20px">
+            <div class="stat-card"><div class="stat-value" id="wl-total">—</div><div class="stat-label">Total na waitlist</div></div>
+            <div class="stat-card"><div class="stat-value" id="wl-ios">—</div><div class="stat-label">iOS / Android</div></div>
+          </div>
+          <div class="data-table">
+            <div class="table-head" style="grid-template-columns:2fr 1fr 1fr">
+              <div>Email</div><div>Plataforma</div><div>Data</div>
+            </div>
+            <div id="waitlist-list"><div class="loading">Carregando...</div></div>
           </div>
         </div>
 
@@ -520,6 +535,7 @@ const PAGE_TITLES = {
   pais:        ['Pais & Responsáveis', 'Usuários com papel de pai/mãe'],
   familia:     ['Família', 'Vínculos pai → aluno e convites pendentes'],
   subscricoes: ['Subscrições', 'Planos ativos, cancelados e trials'],
+  waitlist:    ['Waitlist', 'Emails cadastrados antes do lançamento'],
   analytics:   ['Analytics', 'Eventos, sessões e uso de voz'],
   apis:        ['APIs & Custo', 'Uso e custo das APIs externas'],
   erros:       ['Erros', 'Log de erros reportados pelo app'],
@@ -550,6 +566,7 @@ function loadPage(page) {
   if (page === 'pais')        loadPais()
   if (page === 'familia')     loadFamilia()
   if (page === 'subscricoes') loadSubscricoes()
+  if (page === 'waitlist')    loadWaitlist()
   if (page === 'analytics')   loadAnalytics()
   if (page === 'apis')        loadApis()
   if (page === 'erros')       loadErros()
@@ -929,6 +946,32 @@ async function loadSubscricoes() {
     }).join('')
   } catch (e) {
     document.getElementById('sub-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── WAITLIST ──────────────────────────────────────────────────────
+async function loadWaitlist() {
+  document.getElementById('waitlist-list').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    const rows = await api('list_waitlist')
+    const total = rows.length
+    const ios = rows.filter(r => r.platform === 'ios').length
+    const android = rows.filter(r => r.platform === 'android').length
+    document.getElementById('wl-total').textContent = total
+    document.getElementById('wl-ios').textContent = `${ios} / ${android}`
+    document.getElementById('badge-waitlist').textContent = total
+    if (!rows.length) {
+      document.getElementById('waitlist-list').innerHTML = '<div class="loading">Nenhum cadastro ainda.</div>'
+      return
+    }
+    document.getElementById('waitlist-list').innerHTML = rows.map(r => `
+      <div class="table-row" style="grid-template-columns:2fr 1fr 1fr">
+        <div style="font-size:13px">${r.email}</div>
+        <div><span class="badge ${r.platform === 'ios' ? 'student' : 'free'}">${r.platform ?? '—'}</span></div>
+        <div style="font-size:12px;color:#6b7280">${fmtDate(r.created_at)}</div>
+      </div>`).join('')
+  } catch (e) {
+    document.getElementById('waitlist-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
   }
 }
 
