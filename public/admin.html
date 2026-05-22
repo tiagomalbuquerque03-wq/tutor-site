@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutor IA — Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4ff; color: #1a1a1a; }
+
+    /* ── LOGIN ───────────────────────────────────────────────────── */
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-box { background: #fff; border-radius: 20px; padding: 48px 40px; width: 380px; box-shadow: 0 8px 32px rgba(30,58,138,0.12); }
+    .login-logo { font-size: 22px; font-weight: 900; color: #1e3a8a; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .login-logo-icon { font-size: 32px; }
+    .login-sub { font-size: 13px; color: #6b7280; margin-bottom: 32px; }
+    .login-box label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .login-box input { width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; margin-bottom: 16px; outline: none; transition: border 0.15s, box-shadow 0.15s; }
+    .login-box input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+    .btn-login { width: 100%; padding: 13px; background: #1e3a8a; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .btn-login:hover { background: #1e40af; }
+    .login-error { color: #dc2626; font-size: 13px; margin-top: 12px; }
+
+    /* ── LAYOUT ──────────────────────────────────────────────────── */
+    #admin-screen { display: none; min-height: 100vh; }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────── */
+    .sidebar { width: 224px; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; }
+    .sidebar-logo { padding: 24px 20px 18px; border-bottom: 1px solid #e5e7eb; }
+    .sidebar-logo-title { font-size: 16px; font-weight: 900; color: #1e3a8a; display: flex; align-items: center; gap: 8px; }
+    .sidebar-logo-sub { font-size: 11px; color: #9ca3af; margin-top: 3px; }
+    .sidebar-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+    .nav-group { padding: 12px 16px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; font-size: 13px; font-weight: 600; color: #4b5563; cursor: pointer; border-left: 3px solid transparent; user-select: none; transition: all 0.1s; }
+    .nav-item:hover { background: #eff6ff; color: #1e3a8a; }
+    .nav-item.active { background: #eff6ff; color: #1e3a8a; border-left-color: #2563eb; }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-badge { margin-left: auto; background: #fef3c7; color: #92400e; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; }
+    .nav-badge.red { background: #fee2e2; color: #dc2626; }
+    .nav-badge.blue { background: #dbeafe; color: #1d4ed8; }
+    .sidebar-footer { padding: 14px 20px; border-top: 1px solid #e5e7eb; }
+    .sidebar-footer-name { font-size: 12px; font-weight: 700; color: #374151; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 8px; }
+    .sidebar-footer-email { font-size: 11px; color: #9ca3af; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 10px; }
+    .btn-logout { background: none; border: 1px solid #d1d5db; border-radius: 7px; padding: 6px 12px; font-size: 12px; cursor: pointer; color: #6b7280; width: 100%; transition: background 0.1s; }
+    .btn-logout:hover { background: #f9fafb; }
+
+    /* ── MAIN ────────────────────────────────────────────────────── */
+    .main { margin-left: 224px; flex: 1; }
+    .topbar { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 16px 32px; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+    .topbar-left { }
+    .topbar-title { font-size: 17px; font-weight: 800; color: #111827; }
+    .topbar-sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .topbar-refresh { padding: 7px 16px; background: #eff6ff; color: #1e3a8a; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .topbar-refresh:hover { background: #dbeafe; }
+    .content { max-width: 1000px; margin: 28px auto; padding: 0 32px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── COMPONENTES COMPARTILHADOS ──────────────────────────────── */
+    .loading { text-align: center; padding: 60px 0; color: #6b7280; font-size: 15px; }
+    .empty-state { text-align: center; padding: 80px 0; color: #6b7280; }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-text { font-size: 16px; font-weight: 600; }
+    .stats-row { display: grid; gap: 16px; margin-bottom: 28px; }
+    .stats-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .stats-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .stats-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .stat-card { background: #fff; border-radius: 14px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .stat-icon { font-size: 22px; margin-bottom: 8px; }
+    .stat-value { font-size: 30px; font-weight: 900; color: #111827; line-height: 1; }
+    .stat-label { font-size: 12px; color: #6b7280; margin-top: 4px; font-weight: 500; }
+    .stat-sub { font-size: 12px; color: #6b7280; margin-top: 6px; }
+    .stat-card.accent { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); }
+    .stat-card.accent .stat-value, .stat-card.accent .stat-label, .stat-card.accent .stat-sub { color: rgba(255,255,255,0.9); }
+    .stat-card.accent .stat-value { color: #fff; }
+    .search-bar { display: flex; gap: 12px; margin-bottom: 20px; }
+    .search-bar input { flex: 1; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; }
+    .search-bar input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .search-bar select { padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
+
+    /* ── TABELAS ─────────────────────────────────────────────────── */
+    .data-table { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
+    .table-head { display: grid; padding: 11px 20px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+    .table-row { display: grid; padding: 13px 20px; border-bottom: 1px solid #f3f4f6; align-items: center; cursor: pointer; transition: background 0.1s; }
+    .table-row:last-child { border-bottom: none; }
+    .table-row:hover { background: #f9fafb; }
+    .user-info { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+    .avatar.student { background: #dbeafe; color: #1e40af; }
+    .avatar.parent  { background: #d1fae5; color: #065f46; }
+    .user-name { font-size: 14px; font-weight: 600; color: #111827; }
+    .user-sub  { font-size: 11px; color: #9ca3af; }
+    .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .badge.premium  { background: #fef3c7; color: #92400e; }
+    .badge.free     { background: #f3f4f6; color: #4b5563; }
+    .badge.active   { background: #d1fae5; color: #065f46; }
+    .badge.cancelled { background: #fee2e2; color: #dc2626; }
+    .badge.trial    { background: #ede9fe; color: #6d28d9; }
+    .badge.student  { background: #dbeafe; color: #1e40af; }
+    .badge.parent   { background: #d1fae5; color: #065f46; }
+    .badge.br { background: #dcfce7; color: #15803d; }
+    .badge.ca { background: #dbeafe; color: #1d4ed8; }
+    .col-date { font-size: 12px; color: #9ca3af; }
+    .col-num  { font-size: 14px; font-weight: 700; color: #374151; }
+    .actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-view { background: #eff6ff; color: #1e3a8a; border: 1px solid #bfdbfe; }
+    .btn-view:hover { background: #dbeafe; }
+    .btn-del  { background: #fff; color: #dc2626; border: 1px solid #fca5a5; }
+    .btn-del:hover  { background: #fee2e2; }
+
+    /* ── MODAL ───────────────────────────────────────────────────── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 20px; width: 680px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 12px 48px rgba(0,0,0,0.18); }
+    .modal-header-band { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 24px 28px 20px; border-radius: 20px 20px 0 0; position: relative; }
+    .modal-close { position: absolute; top: 14px; right: 16px; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { background: rgba(255,255,255,0.35); }
+    .modal-avatar-lg { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #1e3a8a; background: #fff; border: 3px solid rgba(255,255,255,0.4); }
+    .modal-name { font-size: 19px; font-weight: 800; color: #fff; margin-top: 4px; }
+    .modal-meta-row { display: flex; gap: 14px; margin-top: 6px; flex-wrap: wrap; }
+    .modal-meta-item { font-size: 11px; color: rgba(255,255,255,0.8); }
+    .modal-metrics { display: grid; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+    .modal-metric { padding: 14px 12px; text-align: center; border-right: 1px solid #e5e7eb; }
+    .modal-metric:last-child { border-right: none; }
+    .modal-metric-val { font-size: 22px; font-weight: 800; color: #111827; }
+    .modal-metric-lbl { font-size: 10px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+    .modal-body { padding: 20px 28px 24px; }
+    .modal-section-title { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 0 10px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .info-item { background: #f9fafb; border-radius: 8px; padding: 9px 12px; }
+    .info-label { font-size: 10px; color: #9ca3af; font-weight: 600; margin-bottom: 2px; }
+    .info-value { font-size: 13px; color: #111827; font-weight: 600; }
+    .info-value.muted { color: #9ca3af; font-weight: 400; font-style: italic; }
+    .session-list { }
+    .session-item { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+    .session-item:last-child { border-bottom: none; }
+    .modal-footer { padding: 12px 28px 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; }
+    .btn-danger { padding: 8px 18px; background: #fff; color: #dc2626; border: 1px solid #fca5a5; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-danger:hover { background: #fee2e2; }
+
+    /* ── ANALYTICS ───────────────────────────────────────────────── */
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .analytics-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
+    .analytics-card-title { font-size: 13px; font-weight: 700; color: #374151; padding: 14px 20px 12px; border-bottom: 1px solid #f3f4f6; }
+    .analytics-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 20px; border-bottom: 1px solid #f9fafb; font-size: 13px; }
+    .analytics-item:last-child { border-bottom: none; }
+    .analytics-item-name { color: #374151; font-weight: 500; }
+    .analytics-item-count { font-weight: 700; color: #374151; background: #f3f4f6; padding: 2px 10px; border-radius: 20px; font-size: 12px; }
+    .chart-wrap { display: flex; align-items: flex-end; gap: 5px; padding: 16px 20px 14px; height: 120px; }
+    .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; }
+    .chart-bar { width: 100%; background: #bfdbfe; border-radius: 3px 3px 0 0; min-height: 2px; }
+    .chart-bar.today { background: #2563eb; }
+    .chart-cnt { font-size: 9px; font-weight: 700; color: #374151; }
+    .chart-lbl { font-size: 8px; color: #9ca3af; white-space: nowrap; }
+
+    /* ── APIs ────────────────────────────────────────────────────── */
+    .api-providers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+    .api-card { background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #e5e7eb; }
+    .api-card.anthropic { border-left-color: #7c3aed; }
+    .api-card.openai    { border-left-color: #059669; }
+    .api-card.deepgram  { border-left-color: #d97706; }
+    .api-card.cartesia  { border-left-color: #dc2626; }
+    .api-card.resend    { border-left-color: #0284c7; }
+    .api-name { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 2px; }
+    .api-operation { font-size: 11px; color: #9ca3af; margin-bottom: 12px; }
+    .api-cost { font-size: 26px; font-weight: 900; color: #111827; }
+    .api-cost-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .api-stats { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f3f4f6; }
+    .api-stat { }
+    .api-stat-val { font-size: 14px; font-weight: 700; color: #374151; }
+    .api-stat-lbl { font-size: 10px; color: #9ca3af; }
+    .api-chart { margin-top: 14px; }
+    .api-detail-table { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; margin-top: 20px; }
+    .api-detail-head { display: grid; grid-template-columns: 100px 100px 90px 90px 90px 70px 70px; padding: 10px 20px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 10px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
+    .api-detail-row  { display: grid; grid-template-columns: 100px 100px 90px 90px 90px 70px 70px; padding: 11px 20px; border-bottom: 1px solid #f3f4f6; font-size: 12px; color: #374151; }
+    .api-detail-row:last-child { border-bottom: none; }
+    .api-detail-row:hover { background: #f9fafb; }
+
+    /* ── ERROS ───────────────────────────────────────────────────── */
+    .error-badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .error-badge.claude_api     { background: #ede9fe; color: #6d28d9; }
+    .error-badge.whisper_api    { background: #d1fae5; color: #065f46; }
+    .error-badge.deepgram_api   { background: #fef3c7; color: #92400e; }
+    .error-badge.cartesia_api   { background: #fee2e2; color: #dc2626; }
+    .error-badge.resend_api     { background: #dbeafe; color: #1d4ed8; }
+    .error-badge.upload         { background: #fce7f3; color: #9d174d; }
+    .error-badge.auth           { background: #f3f4f6; color: #374151; }
+    .error-badge.db_rpc         { background: #dbeafe; color: #1d4ed8; }
+    .error-badge.voice_pipeline { background: #fef3c7; color: #b45309; }
+    .error-badge.other          { background: #f3f4f6; color: #374151; }
+    .error-row { background: #fff; border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); cursor: pointer; }
+    .error-row:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .error-row-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .error-msg { font-size: 13px; color: #374151; font-family: monospace; }
+    .error-ctx { font-size: 11px; color: #9ca3af; background: #f9fafb; border-radius: 6px; padding: 8px 10px; margin-top: 8px; font-family: monospace; white-space: pre-wrap; display: none; max-height: 200px; overflow-y: auto; }
+    .error-row.expanded .error-ctx { display: block; }
+
+    /* ── SUBSCRIÇÕES ─────────────────────────────────────────────── */
+    .sub-table-head { grid-template-columns: 2fr 80px 80px 80px 100px 100px 80px; }
+    .sub-table-row  { grid-template-columns: 2fr 80px 80px 80px 100px 100px 80px; }
+
+    /* ── FAMÍLIA ─────────────────────────────────────────────────── */
+    .family-card { background: #fff; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; }
+    .family-left { display: flex; align-items: center; gap: 16px; }
+    .family-arrow { font-size: 18px; color: #9ca3af; }
+    .family-person { }
+    .family-role { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 2px; }
+    .family-name { font-size: 14px; font-weight: 700; color: #111827; }
+
+    /* ── DASHBOARD (Home) ────────────────────────────────────────── */
+    .dash-section { margin-bottom: 28px; }
+    .dash-section-title { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ─────────────────────────────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo"><span class="login-logo-icon">📚</span>Tutor IA</div>
+    <div class="login-sub">Painel de administração</div>
+    <label>E-mail</label>
+    <input type="email" id="login-email" placeholder="admin@tutoria.app" autocomplete="email">
+    <label>Senha</label>
+    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    <button class="btn-login" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ── ADMIN ──────────────────────────────────────────────────────── -->
+<div id="admin-screen">
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-title">📚 Tutor IA</div>
+        <div class="sidebar-logo-sub">Admin Panel</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-group">Visão geral</div>
+        <div class="nav-item active" onclick="goTo('dashboard')"><span class="nav-icon">📊</span>Dashboard</div>
+
+        <div class="nav-group">Usuários</div>
+        <div class="nav-item" onclick="goTo('alunos')"><span class="nav-icon">🎓</span>Alunos <span class="nav-badge blue" id="badge-alunos">—</span></div>
+        <div class="nav-item" onclick="goTo('pais')"><span class="nav-icon">👨‍👩‍👧</span>Pais <span class="nav-badge" id="badge-pais">—</span></div>
+        <div class="nav-item" onclick="goTo('familia')"><span class="nav-icon">🔗</span>Família</div>
+        <div class="nav-item" onclick="goTo('subscricoes')"><span class="nav-icon">💳</span>Subscrições</div>
+
+        <div class="nav-group">Monitoramento</div>
+        <div class="nav-item" onclick="goTo('piloto')"><span class="nav-icon">🎯</span>Piloto</div>
+        <div class="nav-item" onclick="goTo('analytics')"><span class="nav-icon">📈</span>Analytics</div>
+        <div class="nav-item" onclick="goTo('apis')"><span class="nav-icon">⚡</span>APIs &amp; Custo</div>
+        <div class="nav-item" onclick="goTo('erros')"><span class="nav-icon">🔴</span>Erros <span class="nav-badge red" id="badge-erros">—</span></div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-name" id="admin-name">—</div>
+        <div class="sidebar-footer-email" id="admin-email">—</div>
+        <button class="btn-logout" onclick="doLogout()">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+          <div class="topbar-sub" id="topbar-sub">Visão geral do Tutor IA</div>
+        </div>
+        <button class="topbar-refresh" onclick="refreshPage()">↻ Atualizar</button>
+      </div>
+
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+          <div class="loading" id="dash-loading">Carregando...</div>
+          <div id="dash-content" style="display:none">
+            <div class="dash-section">
+              <div class="stats-row cols-4" id="dash-kpis"></div>
+            </div>
+            <div class="dash-section">
+              <div class="dash-section-title">📅 Sessões — últimos 14 dias</div>
+              <div class="analytics-card">
+                <div class="chart-wrap" id="dash-sessions-chart"></div>
+              </div>
+            </div>
+            <div class="dash-section">
+              <div class="stats-row cols-3" id="dash-api-summary"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALUNOS -->
+        <div class="page" id="page-alunos">
+          <div class="search-bar">
+            <input type="text" id="alunos-search" placeholder="Buscar por nome, escola..." oninput="filterAlunos()">
+            <select id="alunos-plan" onchange="filterAlunos()">
+              <option value="">Todos os planos</option>
+              <option value="free">Free</option>
+              <option value="premium">Premium</option>
+            </select>
+            <select id="alunos-country" onchange="filterAlunos()">
+              <option value="">Todos os países</option>
+              <option value="BR">Brasil</option>
+              <option value="CA">Canadá</option>
+            </select>
+          </div>
+          <div class="data-table">
+            <div class="table-head" style="grid-template-columns: 2.5fr 60px 80px 80px 90px 80px">
+              <span>Aluno</span><span>Série</span><span>Plano</span><span>País</span><span>Cadastro</span><span></span>
+            </div>
+            <div id="alunos-list"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- PAIS -->
+        <div class="page" id="page-pais">
+          <div class="search-bar">
+            <input type="text" id="pais-search" placeholder="Buscar por nome..." oninput="filterPais()">
+            <select id="pais-country" onchange="filterPais()">
+              <option value="">Todos os países</option>
+              <option value="BR">Brasil</option>
+              <option value="CA">Canadá</option>
+            </select>
+          </div>
+          <div class="data-table">
+            <div class="table-head" style="grid-template-columns: 2.5fr 80px 80px 80px 80px">
+              <span>Pai/Mãe</span><span>País</span><span>Filhos</span><span>Idioma</span><span>Cadastro</span>
+            </div>
+            <div id="pais-list"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- FAMÍLIA -->
+        <div class="page" id="page-familia">
+          <div class="stats-row cols-2" style="margin-bottom:20px">
+            <div class="stat-card"><div class="stat-value" id="fam-total-links">—</div><div class="stat-label">Vínculos ativos</div></div>
+            <div class="stat-card"><div class="stat-value" id="fam-pending-inv">—</div><div class="stat-label">Convites pendentes</div></div>
+          </div>
+          <div class="dash-section-title" style="margin-bottom:14px;font-size:13px;font-weight:700;color:#374151">Vínculos Pai → Aluno</div>
+          <div id="familia-links"><div class="loading">Carregando...</div></div>
+          <div class="dash-section-title" style="margin:24px 0 14px;font-size:13px;font-weight:700;color:#374151">Convites Pendentes</div>
+          <div class="data-table">
+            <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 100px">
+              <span>Email convidado</span><span>Convidado por</span><span>Role</span><span>Data</span>
+            </div>
+            <div id="familia-invitations"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- SUBSCRIÇÕES -->
+        <div class="page" id="page-subscricoes">
+          <div class="stats-row cols-3" id="sub-kpis" style="margin-bottom:20px"></div>
+          <div class="data-table">
+            <div class="table-head sub-table-head">
+              <span>Aluno</span><span>Plano</span><span>Status</span><span>Moeda</span><span>Valor</span><span>Expira</span><span>Provider</span>
+            </div>
+            <div id="sub-list"><div class="loading">Carregando...</div></div>
+          </div>
+        </div>
+
+        <!-- PILOTO -->
+        <div class="page" id="page-piloto">
+          <div class="stats-row cols-3" style="margin-bottom:20px" id="piloto-kpis">
+            <div class="loading" style="grid-column:1/-1">Carregando...</div>
+          </div>
+          <!-- Semáforos de metas -->
+          <div style="background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:20px">
+            <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:14px">🎯 Metas do piloto (conselho)</div>
+            <div id="piloto-goals" style="display:grid;gap:10px"></div>
+          </div>
+          <!-- Gráfico sessões 7 dias -->
+          <div class="analytics-card" style="margin-bottom:20px">
+            <div class="analytics-card-title">📅 Sessões por dia (últimos 7 dias)</div>
+            <div class="chart-wrap" id="piloto-sessions-chart"></div>
+          </div>
+          <!-- Retenção D7 -->
+          <div style="background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+            <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:4px">Retenção D7</div>
+            <div style="font-size:12px;color:#6b7280;margin-bottom:14px">Alunos cadastrados há 7–14 dias que retornaram na última semana</div>
+            <div id="piloto-d7"></div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS -->
+        <div class="page" id="page-analytics">
+          <div class="search-bar" style="margin-bottom:20px">
+            <select id="analytics-days" onchange="loadAnalytics()">
+              <option value="7">Últimos 7 dias</option>
+              <option value="30" selected>Últimos 30 dias</option>
+              <option value="90">Últimos 90 dias</option>
+            </select>
+          </div>
+          <div class="stats-row cols-4" id="analytics-kpis" style="margin-bottom:24px"></div>
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <div class="analytics-card-title">📱 Eventos por tipo</div>
+              <div id="analytics-events-list"></div>
+            </div>
+            <div class="analytics-card">
+              <div class="analytics-card-title">📖 Sessões por tipo</div>
+              <div id="analytics-sessions-list"></div>
+            </div>
+          </div>
+          <div class="analytics-card" style="margin-bottom:20px">
+            <div class="analytics-card-title">🎤 Interações de voz por dia</div>
+            <div class="chart-wrap" id="analytics-voice-chart"></div>
+          </div>
+        </div>
+
+        <!-- APIs -->
+        <div class="page" id="page-apis">
+          <div class="search-bar" style="margin-bottom:20px">
+            <select id="api-days" onchange="loadApis()">
+              <option value="7">Últimos 7 dias</option>
+              <option value="30" selected>Últimos 30 dias</option>
+              <option value="90">Últimos 90 dias</option>
+            </select>
+          </div>
+          <div class="api-providers" id="api-provider-cards"></div>
+          <div class="analytics-card" style="margin-bottom:20px">
+            <div class="analytics-card-title">💰 Custo total por dia (USD)</div>
+            <div class="chart-wrap" id="api-cost-chart"></div>
+          </div>
+          <div class="api-detail-table">
+            <div class="api-detail-head">
+              <span>Data</span><span>Provider</span><span>Tokens in</span><span>Tokens out</span><span>Áudio (s)</span><span>Chars</span><span>Custo</span>
+            </div>
+            <div id="api-detail-rows"></div>
+          </div>
+        </div>
+
+        <!-- ERROS -->
+        <div class="page" id="page-erros">
+          <div class="search-bar">
+            <select id="error-type-filter" onchange="filterErrors()">
+              <option value="">Todos os tipos</option>
+              <option value="claude_api">claude_api</option>
+              <option value="whisper_api">whisper_api</option>
+              <option value="deepgram_api">deepgram_api</option>
+              <option value="cartesia_api">cartesia_api</option>
+              <option value="resend_api">resend_api</option>
+              <option value="upload">upload</option>
+              <option value="auth">auth</option>
+              <option value="db_rpc">db_rpc</option>
+              <option value="voice_pipeline">voice_pipeline</option>
+              <option value="other">other</option>
+            </select>
+          </div>
+          <div class="stats-row cols-3" id="error-stats" style="margin-bottom:20px"></div>
+          <div id="errors-list"><div class="loading">Carregando...</div></div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /layout -->
+</div><!-- /admin-screen -->
+
+<!-- Modal de usuário -->
+<div class="modal-overlay" id="user-modal" onclick="closeModal(event)">
+  <div class="modal" id="user-modal-inner"></div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://mpiunifakygtxmlirufq.supabase.co'
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1waXVuaWZha3lndHhtbGlydWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MzQ4MDIsImV4cCI6MjA5MDIxMDgwMn0.GbA9IshUnxMx51mtWOII-TJRDYQh8DwUAj9POBYRmcU'
+const ADMIN_API     = SUPABASE_URL + '/functions/v1/admin-api'
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
+
+// ── STATE ─────────────────────────────────────────────────────────
+let currentPage = 'dashboard'
+let allAlunos = [], allPais = [], allErrors = []
+
+// ── AUTH ──────────────────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('login-email').value.trim()
+  const password = document.getElementById('login-password').value
+  const errEl    = document.getElementById('login-error')
+  errEl.textContent = ''
+  if (!email || !password) { errEl.textContent = 'Preencha email e senha.'; return }
+
+  const { error } = await sb.auth.signInWithPassword({ email, password })
+  if (error) { errEl.textContent = error.message; return }
+
+  const { data: { user } } = await sb.auth.getUser()
+  const { data: profile }  = await sb.from('profiles').select('full_name, is_admin').eq('id', user.id).single()
+
+  if (!profile?.is_admin) {
+    await sb.auth.signOut()
+    errEl.textContent = 'Acesso negado. Apenas administradores.'
+    return
+  }
+
+  document.getElementById('admin-name').textContent  = profile.full_name || email
+  document.getElementById('admin-email').textContent = user.email
+  document.getElementById('login-screen').style.display = 'none'
+  document.getElementById('admin-screen').style.display  = 'block'
+  loadPage('dashboard')
+}
+
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin() })
+
+async function doLogout() {
+  await sb.auth.signOut()
+  location.reload()
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+const PAGE_TITLES = {
+  dashboard:   ['Dashboard', 'Visão geral do Tutor IA'],
+  piloto:      ['Piloto', 'Métricas de validação — DAU, sessão média, retenção D7'],
+  alunos:      ['Alunos', 'Lista de estudantes cadastrados'],
+  pais:        ['Pais & Responsáveis', 'Usuários com papel de pai/mãe'],
+  familia:     ['Família', 'Vínculos pai → aluno e convites pendentes'],
+  subscricoes: ['Subscrições', 'Planos ativos, cancelados e trials'],
+  analytics:   ['Analytics', 'Eventos, sessões e uso de voz'],
+  apis:        ['APIs & Custo', 'Uso e custo das APIs externas'],
+  erros:       ['Erros', 'Log de erros reportados pelo app'],
+}
+
+function goTo(page) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'))
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'))
+  event?.currentTarget?.classList.add('active')
+  // sync sidebar highlight
+  document.querySelectorAll('.nav-item').forEach(el => {
+    if (el.getAttribute('onclick')?.includes(`'${page}'`)) el.classList.add('active')
+  })
+  document.getElementById(`page-${page}`)?.classList.add('active')
+  const [title, sub] = PAGE_TITLES[page] ?? [page, '']
+  document.getElementById('topbar-title').textContent = title
+  document.getElementById('topbar-sub').textContent   = sub
+  currentPage = page
+  loadPage(page)
+}
+
+function refreshPage() { loadPage(currentPage) }
+
+function loadPage(page) {
+  if (page === 'dashboard')   loadDashboard()
+  if (page === 'piloto')      loadPiloto()
+  if (page === 'alunos')      loadAlunos()
+  if (page === 'pais')        loadPais()
+  if (page === 'familia')     loadFamilia()
+  if (page === 'subscricoes') loadSubscricoes()
+  if (page === 'analytics')   loadAnalytics()
+  if (page === 'apis')        loadApis()
+  if (page === 'erros')       loadErros()
+}
+
+// ── API CALL HELPER ───────────────────────────────────────────────
+async function api(action, params = {}) {
+  const { data: { session } } = await sb.auth.getSession()
+  const res = await fetch(ADMIN_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': 'Bearer ' + session.access_token,
+      'apikey':        SUPABASE_ANON,
+    },
+    body: JSON.stringify({ action, ...params }),
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json()
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function fmt(n) { return (n ?? 0).toLocaleString('pt-BR') }
+function fmtUSD(n) { return '$' + (n ?? 0).toFixed(4) }
+function fmtDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })
+}
+function fmtDatetime(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+}
+function initials(name) {
+  if (!name) return '?'
+  return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+}
+function plan_badge(plan) {
+  const cls = plan === 'premium' ? 'premium' : 'free'
+  return `<span class="badge ${cls}">${plan ?? 'free'}</span>`
+}
+function country_badge(cc) {
+  return cc ? `<span class="badge ${cc.toLowerCase()}">${cc}</span>` : '—'
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────
+async function loadDashboard() {
+  document.getElementById('dash-loading').style.display = 'block'
+  document.getElementById('dash-content').style.display = 'none'
+  try {
+    const [students, parents, analytics, apiUsage, errors] = await Promise.all([
+      api('list_students'),
+      api('list_parents'),
+      api('get_analytics', { days: 14 }),
+      api('get_api_usage', { days: 30 }),
+      api('get_errors', { limit: 200 }),
+    ])
+
+    const premium = students.filter(s => s.students?.[0]?.plan === 'premium').length
+    const totalSessions = (analytics.sessions ?? []).length
+    const totalCost = Object.values(apiUsage.totals ?? {}).reduce((acc, p) => acc + (p.cost_usd ?? 0), 0)
+    const errCount = errors.logs?.length ?? 0
+
+    document.getElementById('badge-alunos').textContent = students.length
+    document.getElementById('badge-pais').textContent   = parents.length
+    document.getElementById('badge-erros').textContent  = errCount
+
+    document.getElementById('dash-kpis').innerHTML = `
+      <div class="stat-card accent">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-value">${students.length}</div>
+        <div class="stat-label">Alunos cadastrados</div>
+        <div class="stat-sub">${premium} premium</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👨‍👩‍👧</div>
+        <div class="stat-value">${parents.length}</div>
+        <div class="stat-label">Pais cadastrados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📖</div>
+        <div class="stat-value">${totalSessions}</div>
+        <div class="stat-label">Sessões (14 dias)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">${fmtUSD(totalCost)}</div>
+        <div class="stat-label">Custo APIs (30 dias)</div>
+      </div>
+    `
+
+    // Gráfico de sessões por dia (14 dias)
+    const sessionsByDay = {}
+    const now = new Date()
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(now); d.setDate(d.getDate() - i)
+      sessionsByDay[d.toISOString().slice(0, 10)] = 0
+    }
+    for (const s of analytics.sessions ?? []) {
+      const day = s.started_at?.slice(0, 10)
+      if (day in sessionsByDay) sessionsByDay[day]++
+    }
+    const maxS = Math.max(...Object.values(sessionsByDay), 1)
+    const today = now.toISOString().slice(0, 10)
+    document.getElementById('dash-sessions-chart').innerHTML = Object.entries(sessionsByDay).map(([d, v]) => {
+      const h = Math.max(8, Math.round((v / maxS) * 90))
+      const isToday = d === today
+      const lbl = d.slice(5) // MM-DD
+      return `<div class="chart-col">
+        <div class="chart-cnt">${v || ''}</div>
+        <div class="chart-bar ${isToday ? 'today' : ''}" style="height:${h}px"></div>
+        <div class="chart-lbl">${lbl}</div>
+      </div>`
+    }).join('')
+
+    // Resumo APIs
+    const providers = ['anthropic', 'openai', 'deepgram', 'cartesia', 'resend']
+    const provLabels = { anthropic: '🤖 Claude (Anthropic)', openai: '🎙 Whisper (OpenAI)', deepgram: '🎤 Deepgram STT', cartesia: '🔊 Cartesia TTS', resend: '📧 Resend' }
+    document.getElementById('dash-api-summary').innerHTML = providers.slice(0, 3).map(p => {
+      const t = apiUsage.totals?.[p]
+      return t ? `<div class="stat-card">
+        <div class="stat-label">${provLabels[p]}</div>
+        <div class="stat-value" style="font-size:22px">${fmtUSD(t.cost_usd)}</div>
+        <div class="stat-sub">${fmt(t.calls)} chamadas${t.input_tokens ? ' · ' + fmt(t.input_tokens) + ' tok in' : ''}</div>
+      </div>` : ''
+    }).join('')
+
+    document.getElementById('dash-loading').style.display = 'none'
+    document.getElementById('dash-content').style.display = 'block'
+  } catch (e) {
+    document.getElementById('dash-loading').textContent = 'Erro: ' + e.message
+  }
+}
+
+// ── PILOTO ────────────────────────────────────────────────────────
+async function loadPiloto() {
+  document.getElementById('piloto-kpis').innerHTML = '<div class="loading" style="grid-column:1/-1">Carregando...</div>'
+  try {
+    const m = await api('get_pilot_metrics')
+
+    const dauOk  = m.dau_pct  >= (m.goals.dau_target     ?? 30)
+    const sessOk = m.avg_session_min >= (m.goals.session_target ?? 8)
+    const d7ok   = m.d7_retention_pct !== null && m.d7_retention_pct >= 30
+
+    document.getElementById('piloto-kpis').innerHTML = `
+      <div class="stat-card ${dauOk ? '' : 'accent'}" style="${dauOk ? 'border-left:4px solid #10b981' : 'border-left:4px solid #ef4444;background:#fff'}">
+        <div class="stat-icon">${dauOk ? '✅' : '⚠️'}</div>
+        <div class="stat-value" style="${dauOk ? 'color:#059669' : 'color:#dc2626'}">${m.dau_pct}%</div>
+        <div class="stat-label">DAU (meta: &gt;30%)</div>
+        <div class="stat-sub">${m.dau} de ${m.total_students} ativos hoje</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid ${sessOk ? '#10b981' : '#ef4444'}">
+        <div class="stat-icon">${sessOk ? '✅' : '⚠️'}</div>
+        <div class="stat-value" style="color:${sessOk ? '#059669' : '#dc2626'}">${m.avg_session_min}min</div>
+        <div class="stat-label">Sessão média (meta: &gt;8min)</div>
+        <div class="stat-sub">últimos 7 dias</div>
+      </div>
+      <div class="stat-card" style="border-left:4px solid ${d7ok ? '#10b981' : '#9ca3af'}">
+        <div class="stat-icon">${m.d7_cohort_size === 0 ? '⏳' : d7ok ? '✅' : '⚠️'}</div>
+        <div class="stat-value" style="color:${d7ok ? '#059669' : '#374151'}">${m.d7_retention_pct !== null ? m.d7_retention_pct + '%' : '—'}</div>
+        <div class="stat-label">Retenção D7</div>
+        <div class="stat-sub">${m.d7_returned} de ${m.d7_cohort_size} voltaram</div>
+      </div>
+    `
+
+    document.getElementById('piloto-goals').innerHTML = [
+      { label: 'DAU > 30%',          val: m.dau_pct + '%',              ok: dauOk,  desc: `${m.dau} usuários ativos hoje de ${m.total_students} total` },
+      { label: 'Sessão média > 8min', val: m.avg_session_min + 'min',    ok: sessOk, desc: 'média das sessões dos últimos 7 dias' },
+      { label: 'WAU > 40%',           val: m.wau_pct + '%',              ok: m.wau_pct >= 40, desc: `${m.wau} usuários únicos nos últimos 7 dias` },
+      { label: 'Retenção D7',         val: m.d7_retention_pct !== null ? m.d7_retention_pct + '%' : 'Dados insuficientes', ok: d7ok, desc: `coorte: ${m.d7_cohort_size} alunos cadastrados há 7–14 dias` },
+    ].map(g => {
+      const color = g.ok ? '#059669' : (g.val === 'Dados insuficientes' ? '#6b7280' : '#dc2626')
+      const icon  = g.ok ? '🟢' : (g.val === 'Dados insuficientes' ? '⚪' : '🔴')
+      return `<div style="display:flex;align-items:center;gap:14px;padding:10px 14px;background:#f9fafb;border-radius:10px">
+        <span style="font-size:18px">${icon}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:#111827">${g.label}</div>
+          <div style="font-size:11px;color:#6b7280">${g.desc}</div>
+        </div>
+        <div style="font-size:20px;font-weight:900;color:${color}">${g.val}</div>
+      </div>`
+    }).join('')
+
+    // Gráfico de sessões por dia
+    const days = Object.entries(m.sessions_by_day)
+    const maxC  = Math.max(...days.map(([, d]) => d.count), 1)
+    const todayStr = new Date().toISOString().slice(0, 10)
+    document.getElementById('piloto-sessions-chart').innerHTML = days.map(([d, data]) => {
+      const h = Math.max(4, Math.round((data.count / maxC) * 90))
+      return `<div class="chart-col">
+        <div class="chart-cnt">${data.count || ''}</div>
+        <div class="chart-bar ${d === todayStr ? 'today' : ''}" style="height:${h}px"></div>
+        <div class="chart-lbl">${d.slice(5)}</div>
+      </div>`
+    }).join('')
+
+    // D7 detalhe
+    document.getElementById('piloto-d7').innerHTML = m.d7_cohort_size === 0
+      ? '<div style="color:#9ca3af;font-size:13px">Sem alunos elegíveis ainda (precisam ser cadastrados há 7–14 dias).</div>'
+      : `<div style="font-size:32px;font-weight:900;color:${d7ok ? '#059669' : '#dc2626'}">${m.d7_retention_pct}%</div>
+         <div style="font-size:13px;color:#6b7280;margin-top:4px">${m.d7_returned} de ${m.d7_cohort_size} alunos retornaram</div>`
+
+  } catch (e) {
+    document.getElementById('piloto-kpis').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── ALUNOS ────────────────────────────────────────────────────────
+async function loadAlunos() {
+  document.getElementById('alunos-list').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    allAlunos = await api('list_students')
+    renderAlunos(allAlunos)
+  } catch (e) {
+    document.getElementById('alunos-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+function filterAlunos() {
+  const q       = document.getElementById('alunos-search').value.toLowerCase()
+  const plan    = document.getElementById('alunos-plan').value
+  const country = document.getElementById('alunos-country').value
+  const filtered = allAlunos.filter(s => {
+    const name   = (s.full_name ?? '').toLowerCase()
+    const school = (s.students?.[0]?.school_name ?? '').toLowerCase()
+    if (q && !name.includes(q) && !school.includes(q)) return false
+    if (plan    && (s.students?.[0]?.plan ?? 'free') !== plan) return false
+    if (country && s.country_code !== country) return false
+    return true
+  })
+  renderAlunos(filtered)
+}
+
+function renderAlunos(list) {
+  if (!list.length) { document.getElementById('alunos-list').innerHTML = '<div class="loading">Nenhum aluno encontrado.</div>'; return }
+  document.getElementById('alunos-list').innerHTML = list.map(s => {
+    const st = s.students?.[0] ?? {}
+    const sessions = s.study_sessions?.[0]?.count ?? 0
+    return `<div class="table-row" style="grid-template-columns:2.5fr 60px 80px 80px 90px 80px" onclick="viewUser('${s.id}','student')">
+      <div class="user-info">
+        <div class="avatar student">${initials(s.full_name || s.nickname)}</div>
+        <div>
+          <div class="user-name">${s.full_name || s.nickname || '<em style="color:#9ca3af">(sem nome)</em>'}</div>
+          <div class="user-sub">${st.school_name ?? 'Escola não informada'}</div>
+        </div>
+      </div>
+      <div>${st.grade ? st.grade + 'º' : '—'}</div>
+      <div>${plan_badge(st.plan)}</div>
+      <div>${country_badge(s.country_code)}</div>
+      <div class="col-date">${fmtDate(s.created_at)}</div>
+      <div class="actions"><button class="btn-sm btn-view" onclick="event.stopPropagation();viewUser('${s.id}','student')">Ver</button></div>
+    </div>`
+  }).join('')
+}
+
+// ── PAIS ──────────────────────────────────────────────────────────
+async function loadPais() {
+  document.getElementById('pais-list').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    allPais = await api('list_parents')
+    renderPais(allPais)
+  } catch (e) {
+    document.getElementById('pais-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+function filterPais() {
+  const q       = document.getElementById('pais-search').value.toLowerCase()
+  const country = document.getElementById('pais-country').value
+  const filtered = allPais.filter(p => {
+    if (q && !(p.full_name ?? '').toLowerCase().includes(q)) return false
+    if (country && p.country_code !== country) return false
+    return true
+  })
+  renderPais(filtered)
+}
+
+function renderPais(list) {
+  if (!list.length) { document.getElementById('pais-list').innerHTML = '<div class="loading">Nenhum pai encontrado.</div>'; return }
+  document.getElementById('pais-list').innerHTML = list.map(p => {
+    const children = (p.parent_student ?? []).length
+    const lang = p.preferred_language === 'pt' ? '🇧🇷 PT' : '🇨🇦 EN'
+    return `<div class="table-row" style="grid-template-columns:2.5fr 80px 80px 80px 80px" onclick="viewUser('${p.id}','parent')">
+      <div class="user-info">
+        <div class="avatar parent">${initials(p.full_name)}</div>
+        <div>
+          <div class="user-name">${p.full_name ?? '—'}</div>
+          <div class="user-sub">ID: ${p.id.slice(0,8)}…</div>
+        </div>
+      </div>
+      <div>${country_badge(p.country_code)}</div>
+      <div class="col-num">${children}</div>
+      <div class="col-date">${lang}</div>
+      <div class="col-date">${fmtDate(p.created_at)}</div>
+    </div>`
+  }).join('')
+}
+
+// ── FAMÍLIA ───────────────────────────────────────────────────────
+async function loadFamilia() {
+  document.getElementById('familia-links').innerHTML       = '<div class="loading">Carregando...</div>'
+  document.getElementById('familia-invitations').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    const [links, invitations] = await Promise.all([
+      api('list_family_links'),
+      api('list_family_invitations'),
+    ])
+    document.getElementById('fam-total-links').textContent = links.length
+    document.getElementById('fam-pending-inv').textContent = invitations.length
+
+    if (!links.length) {
+      document.getElementById('familia-links').innerHTML = '<div class="empty-state"><div class="empty-icon">🔗</div><div class="empty-text">Nenhum vínculo.</div></div>'
+    } else {
+      document.getElementById('familia-links').innerHTML = links.map(l => `
+        <div class="family-card">
+          <div class="family-left">
+            <div class="family-person">
+              <div class="family-role">Pai/Mãe</div>
+              <div class="family-name">${l.parent?.full_name ?? l.parent_id.slice(0,8)}</div>
+            </div>
+            <div class="family-arrow">→</div>
+            <div class="family-person">
+              <div class="family-role">Aluno</div>
+              <div class="family-name">${l.student?.full_name ?? l.student_id.slice(0,8)}</div>
+            </div>
+          </div>
+          <div>${country_badge(l.parent?.country_code)}</div>
+        </div>`).join('')
+    }
+
+    if (!invitations.length) {
+      document.getElementById('familia-invitations').innerHTML = '<div class="table-row" style="grid-template-columns:2fr 1fr 1fr 100px"><span style="color:#9ca3af;font-size:13px">Nenhum convite pendente</span></div>'
+    } else {
+      document.getElementById('familia-invitations').innerHTML = invitations.map(inv => `
+        <div class="table-row" style="grid-template-columns:2fr 1fr 1fr 100px">
+          <span>${inv.invitee_email}</span>
+          <span>${inv.inviter?.full_name ?? '—'}</span>
+          <span><span class="badge ${inv.inviter?.role === 'parent' ? 'parent' : 'student'}">${inv.inviter?.role ?? '—'}</span></span>
+          <span class="col-date">${fmtDate(inv.created_at)}</span>
+        </div>`).join('')
+    }
+  } catch (e) {
+    document.getElementById('familia-links').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── SUBSCRIÇÕES ───────────────────────────────────────────────────
+async function loadSubscricoes() {
+  document.getElementById('sub-list').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    const subs = await api('list_subscriptions')
+    const active    = subs.filter(s => s.status === 'active').length
+    const premium   = subs.filter(s => s.plan === 'premium').length
+    const revenue   = subs.filter(s => s.status === 'active' && s.currency === 'BRL').reduce((a, s) => a + (s.amount_cents ?? 0) / 100, 0)
+    document.getElementById('sub-kpis').innerHTML = `
+      <div class="stat-card"><div class="stat-value">${active}</div><div class="stat-label">Assinaturas ativas</div></div>
+      <div class="stat-card"><div class="stat-value">${premium}</div><div class="stat-label">Plano Premium</div></div>
+      <div class="stat-card"><div class="stat-value">R$${revenue.toFixed(0)}</div><div class="stat-label">MRR estimado (BRL)</div></div>
+    `
+    if (!subs.length) { document.getElementById('sub-list').innerHTML = '<div class="loading">Nenhuma subscrição.</div>'; return }
+    document.getElementById('sub-list').innerHTML = subs.map(s => {
+      const name = s.student?.profiles?.full_name ?? s.student?.profiles?.nickname ?? '—'
+      return `<div class="table-row sub-table-row">
+        <div class="user-info">
+          <div class="avatar student">${initials(name)}</div>
+          <div>
+            <div class="user-name">${name}</div>
+            <div class="user-sub">${country_badge(s.student?.profiles?.country_code)}</div>
+          </div>
+        </div>
+        <div>${plan_badge(s.plan)}</div>
+        <div><span class="badge ${s.status}">${s.status}</span></div>
+        <div class="col-date">${s.currency ?? '—'}</div>
+        <div class="col-num">${s.currency === 'BRL' ? 'R$' : 'C$'}${((s.amount_cents ?? 0) / 100).toFixed(2)}</div>
+        <div class="col-date">${fmtDate(s.expires_at)}</div>
+        <div class="col-date">${s.payment_provider ?? '—'}</div>
+      </div>`
+    }).join('')
+  } catch (e) {
+    document.getElementById('sub-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── ANALYTICS ─────────────────────────────────────────────────────
+async function loadAnalytics() {
+  const days = parseInt(document.getElementById('analytics-days').value)
+  document.getElementById('analytics-kpis').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    const data = await api('get_analytics', { days })
+    const { events = [], sessions = [], daily_voice = [] } = data
+
+    const uniqueUsers  = new Set(events.map(e => e.user_id)).size
+    const totalEvents  = events.length
+    const totalSess    = sessions.length
+    const avgDuration  = sessions.length ? (sessions.reduce((a, s) => a + (s.duration_minutes ?? 0), 0) / sessions.length).toFixed(1) : 0
+
+    document.getElementById('analytics-kpis').innerHTML = `
+      <div class="stat-card"><div class="stat-value">${totalEvents}</div><div class="stat-label">Eventos registrados</div></div>
+      <div class="stat-card"><div class="stat-value">${uniqueUsers}</div><div class="stat-label">Usuários ativos</div></div>
+      <div class="stat-card"><div class="stat-value">${totalSess}</div><div class="stat-label">Sessões de estudo</div></div>
+      <div class="stat-card"><div class="stat-value">${avgDuration}min</div><div class="stat-label">Duração média</div></div>
+    `
+
+    // Eventos por tipo
+    const evByType = {}
+    for (const e of events) evByType[e.event_type] = (evByType[e.event_type] ?? 0) + 1
+    const sortedEv = Object.entries(evByType).sort((a, b) => b[1] - a[1]).slice(0, 10)
+    document.getElementById('analytics-events-list').innerHTML = sortedEv.length
+      ? sortedEv.map(([t, c]) => `<div class="analytics-item"><span class="analytics-item-name">${t}</span><span class="analytics-item-count">${c}</span></div>`).join('')
+      : '<div class="analytics-item"><span class="analytics-item-name" style="color:#9ca3af">Sem eventos</span></div>'
+
+    // Sessões por tipo
+    const sesByType = {}
+    for (const s of sessions) sesByType[s.session_type] = (sesByType[s.session_type] ?? 0) + 1
+    const sortedSes = Object.entries(sesByType).sort((a, b) => b[1] - a[1])
+    document.getElementById('analytics-sessions-list').innerHTML = sortedSes.length
+      ? sortedSes.map(([t, c]) => `<div class="analytics-item"><span class="analytics-item-name">${t}</span><span class="analytics-item-count">${c}</span></div>`).join('')
+      : '<div class="analytics-item"><span class="analytics-item-name" style="color:#9ca3af">Sem sessões</span></div>'
+
+    // Gráfico de voz por dia
+    const voiceByDay = {}
+    for (const v of daily_voice) voiceByDay[v.usage_date] = v.voice_interactions_count ?? 0
+    const maxV = Math.max(...Object.values(voiceByDay), 1)
+    const voiceDays = daily_voice.slice(0, 14).reverse()
+    document.getElementById('analytics-voice-chart').innerHTML = voiceDays.map(v => {
+      const h = Math.max(4, Math.round(((v.voice_interactions_count ?? 0) / maxV) * 90))
+      return `<div class="chart-col">
+        <div class="chart-cnt">${v.voice_interactions_count || ''}</div>
+        <div class="chart-bar" style="height:${h}px"></div>
+        <div class="chart-lbl">${v.usage_date.slice(5)}</div>
+      </div>`
+    }).join('')
+
+  } catch (e) {
+    document.getElementById('analytics-kpis').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── APIs ──────────────────────────────────────────────────────────
+const API_META = {
+  anthropic: { label: '🤖 Anthropic (Claude)',  op: 'chat',         color: '#7c3aed' },
+  openai:    { label: '🎙 OpenAI (Whisper)',     op: 'whisper_stt',  color: '#059669' },
+  deepgram:  { label: '🎤 Deepgram (STT)',       op: 'deepgram_stt', color: '#d97706' },
+  cartesia:  { label: '🔊 Cartesia (TTS)',       op: 'tts',          color: '#dc2626' },
+  resend:    { label: '📧 Resend (Email)',        op: 'link_family',  color: '#0284c7' },
+}
+
+async function loadApis() {
+  const days = parseInt(document.getElementById('api-days').value)
+  document.getElementById('api-provider-cards').innerHTML = '<div class="loading" style="grid-column:1/-1">Carregando...</div>'
+  try {
+    const data = await api('get_api_usage', { days })
+    const { totals = {}, daily = [], rows = [] } = data
+
+    // Cards por provider
+    document.getElementById('api-provider-cards').innerHTML = Object.entries(API_META).map(([prov, meta]) => {
+      const t = totals[prov]
+      if (!t) return `<div class="api-card ${prov}">
+        <div class="api-name">${meta.label}</div>
+        <div class="api-operation">${meta.op}</div>
+        <div class="api-cost">$0.0000</div>
+        <div class="api-cost-label">sem uso no período</div>
+      </div>`
+      const statsExtra = prov === 'anthropic'
+        ? `<div class="api-stat"><div class="api-stat-val">${fmt(t.input_tokens)}</div><div class="api-stat-lbl">Tok in</div></div>
+           <div class="api-stat"><div class="api-stat-val">${fmt(t.output_tokens)}</div><div class="api-stat-lbl">Tok out</div></div>`
+        : prov === 'cartesia'
+        ? `<div class="api-stat"><div class="api-stat-val">${fmt(t.characters)}</div><div class="api-stat-lbl">Chars</div></div>`
+        : `<div class="api-stat"><div class="api-stat-val">${(t.audio_seconds ?? 0).toFixed(0)}s</div><div class="api-stat-lbl">Áudio</div></div>`
+      return `<div class="api-card ${prov}">
+        <div class="api-name">${meta.label}</div>
+        <div class="api-operation">${meta.op}</div>
+        <div class="api-cost">${fmtUSD(t.cost_usd)}</div>
+        <div class="api-cost-label">últimos ${days} dias · ${fmt(t.calls)} chamadas · ${t.errors ?? 0} erros</div>
+        <div class="api-stats">
+          <div class="api-stat"><div class="api-stat-val">${fmt(t.calls)}</div><div class="api-stat-lbl">Calls</div></div>
+          ${statsExtra}
+        </div>
+      </div>`
+    }).join('')
+
+    // Gráfico de custo total por dia
+    const costByDay = {}
+    for (const d of daily) {
+      costByDay[d.date] = Object.values(d.providers).reduce((a, p) => a + (p.cost_usd ?? 0), 0)
+    }
+    const sortedDays = Object.entries(costByDay).sort(([a], [b]) => a.localeCompare(b)).slice(-30)
+    const maxCost = Math.max(...sortedDays.map(([, v]) => v), 0.001)
+    const todayStr = new Date().toISOString().slice(0, 10)
+    document.getElementById('api-cost-chart').innerHTML = sortedDays.map(([d, v]) => {
+      const h = Math.max(4, Math.round((v / maxCost) * 90))
+      return `<div class="chart-col">
+        <div class="chart-cnt" style="font-size:8px">${v > 0 ? '$' + v.toFixed(3) : ''}</div>
+        <div class="chart-bar ${d === todayStr ? 'today' : ''}" style="height:${h}px"></div>
+        <div class="chart-lbl">${d.slice(5)}</div>
+      </div>`
+    }).join('')
+
+    // Tabela detalhada por dia
+    document.getElementById('api-detail-rows').innerHTML = daily.slice(0, 30).map(d => {
+      return Object.entries(d.providers).map(([prov, p]) => `
+        <div class="api-detail-row">
+          <span>${d.date}</span>
+          <span>${prov}</span>
+          <span>${fmt(p.input_tokens) || '—'}</span>
+          <span>${fmt(p.output_tokens) || '—'}</span>
+          <span>${p.audio_seconds ? p.audio_seconds.toFixed(1) + 's' : '—'}</span>
+          <span>${p.characters ? fmt(p.characters) : '—'}</span>
+          <span style="font-weight:700">${fmtUSD(p.cost_usd)}</span>
+        </div>`).join('')
+    }).join('')
+
+  } catch (e) {
+    document.getElementById('api-provider-cards').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+// ── ERROS ─────────────────────────────────────────────────────────
+async function loadErros() {
+  document.getElementById('errors-list').innerHTML = '<div class="loading">Carregando...</div>'
+  try {
+    const data = await api('get_errors', { limit: 200 })
+    allErrors = data.logs ?? []
+
+    const byType = {}
+    for (const e of allErrors) byType[e.type] = (byType[e.type] ?? 0) + 1
+    const top = Object.entries(byType).sort((a, b) => b[1] - a[1]).slice(0, 3)
+    document.getElementById('error-stats').innerHTML = top.map(([t, c]) => `
+      <div class="stat-card">
+        <div class="stat-value">${c}</div>
+        <div class="stat-label"><span class="error-badge ${t}">${t}</span></div>
+      </div>`).join('')
+
+    filterErrors()
+  } catch (e) {
+    document.getElementById('errors-list').innerHTML = '<div class="loading">Erro: ' + e.message + '</div>'
+  }
+}
+
+function filterErrors() {
+  const type = document.getElementById('error-type-filter').value
+  const filtered = type ? allErrors.filter(e => e.type === type) : allErrors
+  if (!filtered.length) { document.getElementById('errors-list').innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">Sem erros.</div></div>'; return }
+  document.getElementById('errors-list').innerHTML = filtered.map(e => `
+    <div class="error-row" onclick="this.classList.toggle('expanded')">
+      <div class="error-row-top">
+        <span class="error-badge ${e.type}">${e.type}</span>
+        <span class="col-date">${fmtDatetime(e.created_at)}</span>
+        <span style="font-size:11px;color:#9ca3af">${e.platform ?? ''} ${e.app_version ?? ''}</span>
+      </div>
+      <div class="error-msg">${e.message}</div>
+      ${e.context ? `<div class="error-ctx">${JSON.stringify(e.context, null, 2)}</div>` : ''}
+    </div>`).join('')
+}
+
+// ── MODAL DE USUÁRIO ──────────────────────────────────────────────
+async function viewUser(id, role) {
+  const modal = document.getElementById('user-modal')
+  const inner = document.getElementById('user-modal-inner')
+  inner.innerHTML = '<div class="loading" style="padding:40px">Carregando...</div>'
+  modal.classList.add('open')
+  try {
+    if (role === 'student') await renderStudentModal(id, inner)
+    else await renderParentModal(id, inner)
+  } catch (e) {
+    inner.innerHTML = `<div class="loading">Erro: ${e.message}</div>`
+  }
+}
+
+async function renderStudentModal(id, inner) {
+  const data = await api('view_student', { student_id: id })
+  const { profile, student, email, sessions, subscription, total_sessions, total_duration_minutes, parents } = data
+  const name = profile?.full_name ?? profile?.nickname ?? 'Aluno'
+  const recentSessions = (sessions ?? []).slice(0, 5)
+
+  inner.innerHTML = `
+    <div class="modal-header-band">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="modal-avatar-lg">${initials(name)}</div>
+        <div>
+          <div class="modal-name">${name}</div>
+          <div class="modal-meta-row">
+            <span class="modal-meta-item">📧 ${email ?? '—'}</span>
+            <span class="modal-meta-item">${profile?.country_code === 'BR' ? '🇧🇷 Brasil' : '🇨🇦 Canadá'}</span>
+            <span class="modal-meta-item">${student?.grade ? student.grade + 'º ano' : ''}</span>
+            <span class="modal-meta-item">${plan_badge(student?.plan)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-metrics" style="grid-template-columns:repeat(4,1fr)">
+      <div class="modal-metric"><div class="modal-metric-val">${total_sessions}</div><div class="modal-metric-lbl">Sessões</div></div>
+      <div class="modal-metric"><div class="modal-metric-val">${total_duration_minutes}</div><div class="modal-metric-lbl">Min. estud.</div></div>
+      <div class="modal-metric"><div class="modal-metric-val">${data.uploads?.length ?? 0}</div><div class="modal-metric-lbl">Uploads</div></div>
+      <div class="modal-metric"><div class="modal-metric-val">${subscription ? subscription.status : 'free'}</div><div class="modal-metric-lbl">Plano</div></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Perfil</div>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-label">Escola</div><div class="info-value">${student?.school_name ?? '—'}</div></div>
+        <div class="info-item"><div class="info-label">Idioma</div><div class="info-value">${profile?.preferred_language === 'pt' ? 'Português' : 'English'}</div></div>
+        <div class="info-item"><div class="info-label">Horas/dia</div><div class="info-value">${student?.study_hours_per_day ?? '—'}h</div></div>
+        <div class="info-item"><div class="info-label">Tom do tutor</div><div class="info-value">${student?.tutor_tone ?? '—'}</div></div>
+        <div class="info-item"><div class="info-label">Cadastrado em</div><div class="info-value">${fmtDate(profile?.created_at)}</div></div>
+        <div class="info-item"><div class="info-label">Subscrição</div><div class="info-value">${subscription ? fmtDate(subscription.expires_at) : '—'}</div></div>
+      </div>
+      <div class="modal-section-title">Pais / Responsáveis</div>
+      ${(parents ?? []).length ? parents.map(p => {
+        const pName = p.full_name || p.nickname || '—'
+        return `<div class="family-card" style="margin-bottom:8px">
+          <div class="user-info">
+            <div class="avatar" style="background:#d1fae5;color:#065f46">${initials(pName)}</div>
+            <div>
+              <div class="user-name">${pName}</div>
+              <div class="user-sub">${p.preferred_language === 'pt' ? 'Português' : 'English'} · ${p.country_code ?? '—'}</div>
+            </div>
+          </div>
+          <span class="badge parent">pai/mãe</span>
+        </div>`
+      }).join('') : '<div style="color:#9ca3af;font-size:13px;margin-bottom:12px">Nenhum responsável vinculado.</div>'}
+      <div class="modal-section-title">Últimas sessões</div>
+      <div class="session-list">
+        ${recentSessions.length ? recentSessions.map(s => `
+          <div class="session-item">
+            <span class="badge ${s.session_type === 'lesson' ? 'student' : 'free'}">${s.session_type}</span>
+            <span style="flex:1;font-size:12px;color:#374151">${fmtDatetime(s.started_at)}</span>
+            <span style="font-size:12px;color:#6b7280">${s.duration_minutes ?? 0}min</span>
+          </div>`).join('') : '<div style="color:#9ca3af;font-size:13px">Sem sessões registradas.</div>'}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span style="font-size:12px;color:#9ca3af">ID: ${id}</span>
+      <button class="btn-danger" onclick="deleteUser('${id}')">Excluir conta</button>
+    </div>`
+}
+
+async function renderParentModal(id, inner) {
+  const data = await api('view_parent', { parent_id: id })
+  const { profile, email, linked_students } = data
+  const name = profile?.full_name ?? 'Pai/Mãe'
+
+  inner.innerHTML = `
+    <div class="modal-header-band">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="modal-avatar-lg" style="background:#d1fae5;color:#065f46">${initials(name)}</div>
+        <div>
+          <div class="modal-name">${name}</div>
+          <div class="modal-meta-row">
+            <span class="modal-meta-item">📧 ${email ?? '—'}</span>
+            <span class="modal-meta-item">${profile?.country_code === 'BR' ? '🇧🇷 Brasil' : '🇨🇦 Canadá'}</span>
+            <span class="modal-meta-item"><span class="badge parent">pai/mãe</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-metrics" style="grid-template-columns:repeat(2,1fr)">
+      <div class="modal-metric"><div class="modal-metric-val">${linked_students?.length ?? 0}</div><div class="modal-metric-lbl">Filhos vinculados</div></div>
+      <div class="modal-metric"><div class="modal-metric-val">${fmtDate(profile?.created_at)}</div><div class="modal-metric-lbl">Cadastro</div></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Filhos vinculados</div>
+      ${(linked_students ?? []).length ? linked_students.map(l => {
+        const sName = l.profile?.full_name || l.profile?.nickname || '—'
+        const sessions = l.session_count ?? 0
+        return `<div class="family-card" style="margin-bottom:8px">
+          <div class="user-info">
+            <div class="avatar student">${initials(sName)}</div>
+            <div>
+              <div class="user-name">${sName}</div>
+              <div class="user-sub">${l.student?.grade ? l.student.grade + 'º ano' : ''} · ${l.student?.school_name ?? ''}</div>
+            </div>
+          </div>
+          <div>${plan_badge(l.student?.plan)}</div>
+          <div class="col-num">${sessions} sessões</div>
+        </div>`
+      }).join('') : '<div style="color:#9ca3af;font-size:13px">Nenhum filho vinculado.</div>'}
+      <div class="modal-section-title" style="margin-top:16px">Informações</div>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-label">Idioma</div><div class="info-value">${profile?.preferred_language === 'pt' ? 'Português' : 'English'}</div></div>
+        <div class="info-item"><div class="info-label">País</div><div class="info-value">${profile?.country_code ?? '—'}</div></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span style="font-size:12px;color:#9ca3af">ID: ${id}</span>
+      <button class="btn-danger" onclick="deleteUser('${id}')">Excluir conta</button>
+    </div>`
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('user-modal')) {
+    document.getElementById('user-modal').classList.remove('open')
+  }
+}
+
+async function deleteUser(id) {
+  if (!confirm('Tem certeza? Esta ação é irreversível e apagará todos os dados do usuário.')) return
+  try {
+    await api('delete_user', { user_id: id })
+    closeModal()
+    alert('Conta excluída com sucesso.')
+    if (currentPage === 'alunos') loadAlunos()
+    else if (currentPage === 'pais') loadPais()
+  } catch (e) {
+    alert('Erro ao excluir: ' + e.message)
+  }
+}
+
+// Init
+;(async () => {
+  const { data: { session } } = await sb.auth.getSession()
+  if (session) {
+    const { data: profile } = await sb.from('profiles').select('full_name, is_admin, email').eq('id', session.user.id).single()
+    if (profile?.is_admin) {
+      document.getElementById('admin-name').textContent  = profile.full_name || session.user.email
+      document.getElementById('admin-email').textContent = session.user.email
+      document.getElementById('login-screen').style.display = 'none'
+      document.getElementById('admin-screen').style.display  = 'block'
+      loadPage('dashboard')
+    }
+  }
+})()
+</script>
+</body>
+</html>
