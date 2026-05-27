@@ -23,14 +23,14 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export default function EnglishPage() {
   return (
     <main className="grain">
-      <Navbar c={c.nav} cta={c.cta} basePath={basePath} />
+      <Navbar c={c.nav} cta={c.cta} basePath={basePath} lang="en" />
       <Hero c={c.hero} lang="en" />
       <Comparison lang="en" />
       <Features c={c.features} />
       <Editorial lang="en" />
       <SocialProof c={c.social} />
       <FAQ c={c.faq} />
-      <DownloadCTA c={c.cta} />
+      <DownloadCTA c={c.cta} lang="en" />
       <Footer c={c.footer} />
     </main>
   );

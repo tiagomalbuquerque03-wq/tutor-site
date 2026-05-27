@@ -15,14 +15,14 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export default function Home() {
   return (
     <main className="grain">
-      <Navbar c={c.nav} cta={c.cta} basePath={basePath} />
+      <Navbar c={c.nav} cta={c.cta} basePath={basePath} lang="pt" />
       <Hero c={c.hero} lang="pt" />
       <Comparison lang="pt" />
       <Features c={c.features} />
       <Editorial lang="pt" />
       <SocialProof c={c.social} />
       <FAQ c={c.faq} />
-      <DownloadCTA c={c.cta} />
+      <DownloadCTA c={c.cta} lang="pt" />
       <Footer c={c.footer} />
     </main>
   );
