@@ -79,85 +79,114 @@ export default function DownloadCTA({ c }: { c: Content["cta"] }) {
           {c.sub}
         </p>
 
-        {status === "success" ? (
-          <div className="flex flex-col items-center gap-3 py-8">
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mb-2"
-              style={{ background: "rgba(58,130,255,0.12)", border: "1px solid rgba(58,130,255,0.3)" }}
-            >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <path d="M20 6L9 17l-5-5" stroke="#3A82FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <p className="font-bold text-2xl" style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}>
-              {c.successTitle}
-            </p>
-            <p style={{ color: "var(--text-muted)" }}>{c.successSub}</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
-            {/* Platform toggle */}
-            <div className="flex gap-3">
-              {(["ios", "android"] as const).map((p) => {
-                const selected = platform === p;
-                const label = p === "ios" ? c.iosLabel : c.androidLabel;
-                const Icon = p === "ios" ? AppleIcon : AndroidIcon;
-                return (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setPlatform(p)}
-                    className="flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm transition-all"
-                    style={{
-                      background: selected ? "rgba(58,130,255,0.12)" : "var(--bg-card)",
-                      border: `1px solid ${selected ? "rgba(58,130,255,0.5)" : "var(--border-strong)"}`,
-                      color: selected ? "#60A5FA" : "var(--text-muted)",
-                      fontFamily: "var(--font-space-grotesk)",
-                    }}
-                  >
-                    <Icon selected={selected} />
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Email + submit */}
-            <div className="flex w-full max-w-md gap-2">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={c.emailPlaceholder}
-                className="flex-1 px-4 py-3 rounded-xl text-sm outline-none transition-all"
-                style={{
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--border-strong)",
-                  color: "var(--text-primary)",
-                  fontFamily: "var(--font-dm-sans)",
-                }}
-              />
+        {/* Platform toggle */}
+        <div className="flex justify-center gap-3 mb-6">
+          {(["ios", "android"] as const).map((p) => {
+            const selected = platform === p;
+            const label = p === "ios" ? c.iosLabel : c.androidLabel;
+            const Icon = p === "ios" ? AppleIcon : AndroidIcon;
+            return (
               <button
-                type="submit"
-                disabled={!platform || status === "loading"}
-                className="px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                key={p}
+                type="button"
+                onClick={() => setPlatform(p)}
+                className="flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm transition-all"
                 style={{
-                  background: "var(--accent-blue)",
-                  color: "#fff",
+                  background: selected ? "rgba(58,130,255,0.12)" : "var(--bg-card)",
+                  border: `1px solid ${selected ? "rgba(58,130,255,0.5)" : "var(--border-strong)"}`,
+                  color: selected ? "#60A5FA" : "var(--text-muted)",
                   fontFamily: "var(--font-space-grotesk)",
                 }}
               >
-                {status === "loading" ? "…" : c.submit}
+                <Icon selected={selected} />
+                {label}
               </button>
-            </div>
+            );
+          })}
+        </div>
 
+        {platform === "ios" ? (
+          /* iOS: direct App Store link */
+          <a
+            href={c.iosUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl font-semibold text-base transition-all hover:opacity-90 active:scale-95 mx-auto"
+            style={{
+              background: "var(--accent-blue)",
+              color: "#fff",
+              fontFamily: "var(--font-space-grotesk)",
+              textDecoration: "none",
+            }}
+          >
+            <AppleIcon selected />
+            {c.iosSubmit}
+          </a>
+        ) : platform === "android" ? (
+          /* Android: waitlist form with promo badge */
+          <div className="flex flex-col items-center gap-4 w-full max-w-md">
+            <div
+              className="w-full px-4 py-3 rounded-xl text-sm font-semibold text-center"
+              style={{
+                background: "rgba(58,130,255,0.08)",
+                border: "1px solid rgba(58,130,255,0.25)",
+                color: "#60A5FA",
+                fontFamily: "var(--font-space-grotesk)",
+              }}
+            >
+              {c.note}
+            </div>
+            {status === "success" ? (
+              <div className="flex flex-col items-center gap-3 py-4">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(58,130,255,0.12)", border: "1px solid rgba(58,130,255,0.3)" }}
+                >
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="#3A82FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <p className="font-bold text-xl" style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}>
+                  {c.successTitle}
+                </p>
+                <p style={{ color: "var(--text-muted)" }}>{c.successSub}</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex w-full gap-2">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={c.emailPlaceholder}
+                  className="flex-1 px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                  style={{
+                    background: "var(--bg-card)",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--text-primary)",
+                    fontFamily: "var(--font-dm-sans)",
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                  style={{
+                    background: "var(--accent-blue)",
+                    color: "#fff",
+                    fontFamily: "var(--font-space-grotesk)",
+                  }}
+                >
+                  {status === "loading" ? "…" : c.submit}
+                </button>
+              </form>
+            )}
             {status === "error" && (
               <p className="text-sm" style={{ color: "var(--accent-red)" }}>{c.errorMsg}</p>
             )}
-
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>{c.note}</p>
-          </form>
+          </div>
+        ) : (
+          <p className="text-sm" style={{ color: "var(--text-muted)" }}>{c.note}</p>
         )}
       </div>
     </section>
