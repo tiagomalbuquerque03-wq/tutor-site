@@ -198,7 +198,7 @@ export const content = {
       sub: "Baixe a Clari grátis no App Store. No Android, as 20 primeiras inscrições ganham 6 meses de plano Premium.",
       iosLabel: "iPhone",
       androidLabel: "Android",
-      iosUrl: "https://apps.apple.com/br/app/clari-tutor/id6769223287",
+      iosUrl: "https://apps.apple.com/br/app/clari/id6769223287",
       iosSubmit: "Baixar no App Store",
       emailPlaceholder: "seu@email.com",
       submit: "Quero ser avisado",
