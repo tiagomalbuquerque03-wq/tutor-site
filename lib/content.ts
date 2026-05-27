@@ -1,7 +1,7 @@
 export const content = {
   pt: {
     nav: {
-      download: "Entrar na lista",
+      download: "Lista Android",
       lang: "EN",
       langHref: "/en/",
     },
@@ -220,7 +220,7 @@ export const content = {
   },
   en: {
     nav: {
-      download: "Join waitlist",
+      download: "Android Waitlist",
       lang: "PT",
       langHref: "/",
     },

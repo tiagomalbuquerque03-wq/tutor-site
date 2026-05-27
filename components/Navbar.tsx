@@ -96,6 +96,31 @@ export default function Navbar({
             >
               {c.lang}
             </Link>
+
+            {/* iOS QR code — visible in navbar on desktop */}
+            <a
+              href={cta.iosUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex flex-col items-center gap-0.5 group"
+              title={cta.iosScan}
+            >
+              <div
+                className="rounded-lg overflow-hidden p-0.5 transition-transform group-hover:scale-110"
+                style={{ background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.3)" }}
+              >
+                <img
+                  src={lang === "pt" ? "/qr-ios-pt.png" : "/qr-ios-en.png"}
+                  alt="QR iOS"
+                  className="w-10 h-10 object-contain"
+                />
+              </div>
+              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                {cta.iosLabel}
+              </span>
+            </a>
+
+            {/* Android waitlist button */}
             <button
               onClick={() => setOpen(true)}
               className="text-sm font-semibold px-4 py-2 rounded-lg transition-all hover:opacity-90 active:scale-95"

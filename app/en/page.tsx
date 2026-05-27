@@ -24,7 +24,7 @@ export default function EnglishPage() {
   return (
     <main className="grain">
       <Navbar c={c.nav} cta={c.cta} basePath={basePath} lang="en" />
-      <Hero c={c.hero} cta={c.cta} lang="en" />
+      <Hero c={c.hero} lang="en" />
       <Comparison lang="en" />
       <Features c={c.features} />
       <Editorial lang="en" />

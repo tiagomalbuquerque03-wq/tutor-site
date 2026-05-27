@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <main className="grain">
       <Navbar c={c.nav} cta={c.cta} basePath={basePath} lang="pt" />
-      <Hero c={c.hero} cta={c.cta} lang="pt" />
+      <Hero c={c.hero} lang="pt" />
       <Comparison lang="pt" />
       <Features c={c.features} />
       <Editorial lang="pt" />
