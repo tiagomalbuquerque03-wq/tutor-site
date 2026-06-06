@@ -18,7 +18,7 @@ export default function DownloadCTA({
   lang: "pt" | "en";
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function DownloadCTA({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
+    if (!phone) return;
     setStatus("loading");
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
@@ -46,7 +46,7 @@ export default function DownloadCTA({
           "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
           "Prefer": "return=minimal",
         },
-        body: JSON.stringify({ email, platform: "android" }),
+        body: JSON.stringify({ email: phone, platform: "android" }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");
@@ -189,10 +189,10 @@ export default function DownloadCTA({
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-3 flex-1">
                 <input
-                  type="email"
+                  type="tel"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder={c.emailPlaceholder}
                   className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all"
                   style={{
