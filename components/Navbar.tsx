@@ -20,7 +20,7 @@ export default function Navbar({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [platform, setPlatform] = useState<"ios" | "android">("ios");
+  const [platform, setPlatform] = useState<"ios" | "android">("android");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -40,7 +40,7 @@ export default function Navbar({
     setOpen(false);
     setStatus("idle");
     setEmail("");
-    setPlatform("ios");
+    setPlatform("android");
   }
 
   async function handleSubmit(e: React.FormEvent) {
