@@ -2,7 +2,6 @@ import { content } from "@/lib/content";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import Comparison from "@/components/sections/Comparison";
-import Editorial from "@/components/sections/Editorial";
 import Features from "@/components/sections/Features";
 import SocialProof from "@/components/sections/SocialProof";
 import FAQ from "@/components/sections/FAQ";
@@ -19,7 +18,6 @@ export default function Home() {
       <Hero c={c.hero} lang="pt" />
       <Comparison lang="pt" />
       <Features c={c.features} />
-      <Editorial lang="pt" />
       <SocialProof c={c.social} />
       <FAQ c={c.faq} />
       <DownloadCTA c={c.cta} lang="pt" />

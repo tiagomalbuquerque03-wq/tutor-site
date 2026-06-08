@@ -33,10 +33,10 @@ export default function FAQ({ c }: { c: Content["faq"] }) {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-28 px-6">
+    <section ref={sectionRef} className="py-14 px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-14">
+        <div className="mb-8">
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-4"
             style={{ color: "var(--accent-blue)", fontFamily: "var(--font-space-grotesk)" }}

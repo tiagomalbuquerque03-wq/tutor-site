@@ -20,7 +20,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-[75vh] flex items-center overflow-hidden">
       {/* ── Background photo ── */}
       <div ref={photoRef} className="absolute inset-0 will-change-transform">
         <img
@@ -50,7 +50,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
         style={{ background: "radial-gradient(circle, rgba(58,130,255,0.12) 0%, transparent 70%)" }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-16 w-full">
+      <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-10 w-full">
         <div className="grid lg:grid-cols-[1fr_auto] gap-12 items-center">
           {/* Left — copy */}
           <div className="max-w-2xl">
@@ -59,7 +59,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
               initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.08 }}
-              className="display-xl mb-8"
+              className="display-xl mb-5"
               style={{ color: "var(--text-primary)" }}
             >
               {c.headline[0]}
@@ -72,7 +72,7 @@ export default function Hero({ c, lang = "pt" }: { c: Content["hero"]; lang?: "p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.18 }}
-              className="text-lg leading-relaxed mb-12 max-w-xl"
+              className="text-lg leading-relaxed mb-8 max-w-xl"
               style={{ color: "var(--text-muted)" }}
             >
               {c.sub}

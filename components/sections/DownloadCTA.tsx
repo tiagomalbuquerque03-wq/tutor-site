@@ -59,7 +59,7 @@ export default function DownloadCTA({
     <section
       id="download"
       ref={sectionRef}
-      className="py-32 px-6 relative overflow-hidden"
+      className="py-16 px-6 relative overflow-hidden"
       style={{ background: "var(--bg-surface)" }}
     >
       <div className="section-sep absolute top-0 left-0 right-0" />
@@ -71,7 +71,7 @@ export default function DownloadCTA({
 
       <div className="cta-inner relative max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-8">
           <h2
             className="font-bold mb-4 leading-tight"
             style={{

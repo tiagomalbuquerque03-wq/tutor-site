@@ -177,7 +177,7 @@ export default function Comparison({ lang }: Props) {
   return (
     <section
       ref={sectionRef}
-      className="py-28 px-6 relative overflow-hidden"
+      className="py-14 px-6 relative overflow-hidden"
       style={{ background: "var(--bg-surface)" }}
     >
       <div className="section-sep absolute top-0 left-0 right-0" />
@@ -195,7 +195,7 @@ export default function Comparison({ lang }: Props) {
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="max-w-2xl mb-16">
+        <div className="max-w-2xl mb-8">
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-5"
             style={{ color: "var(--accent-blue)", fontFamily: "var(--font-space-grotesk)" }}
@@ -210,7 +210,7 @@ export default function Comparison({ lang }: Props) {
         </div>
 
         {/* Cards */}
-        <div className="flex flex-col md:flex-row gap-5 mb-10">
+        <div className="flex flex-col md:flex-row gap-5 mb-6">
           <div className="cmp-card flex-1">
             <ChatCard
               label={c.leftLabel}

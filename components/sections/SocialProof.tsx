@@ -44,13 +44,13 @@ export default function SocialProof({ c }: { c: Content["social"] }) {
 
   const renderCard = (card: typeof c.studentCard, accent: string, bg: string) => (
     <div
-      className="proof-card flex-1 p-8 rounded-2xl relative overflow-hidden"
+      className="proof-card flex-1 p-6 rounded-2xl relative overflow-hidden"
       style={{ background: bg, border: `1px solid ${accent}30` }}
     >
       {/* Rating */}
       <div className="flex items-end gap-3 mb-2">
         <span
-          className="text-6xl font-bold leading-none"
+          className="text-5xl font-bold leading-none"
           style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text-primary)" }}
         >
           {card.rating}
@@ -61,32 +61,22 @@ export default function SocialProof({ c }: { c: Content["social"] }) {
         </div>
       </div>
 
-      <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>{card.sub}</p>
+      <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>{card.sub}</p>
 
       {/* Percentage highlight */}
       <div
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold mb-8"
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold mb-5"
         style={{ background: `${accent}15`, color: accent, border: `1px solid ${accent}30` }}
       >
         <span style={{ fontFamily: "var(--font-space-grotesk)" }}>{card.pct}</span>
         <span className="text-xs font-normal" style={{ color: "var(--text-muted)" }}>{card.pctLabel}</span>
       </div>
 
-      {/* Quotes */}
-      <div className="space-y-4">
-        {card.quotes.map((q, i) => (
-          <div
-            key={i}
-            className="p-4 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-          >
-            <p className="text-sm leading-relaxed mb-2" style={{ color: "var(--text-primary)" }}>
-              {q.text}
-            </p>
-            <p className="text-xs font-medium" style={{ color: accent }}>— {q.name}</p>
-          </div>
-        ))}
-      </div>
+      {/* Single compact quote */}
+      <p className="text-sm leading-relaxed italic mb-1" style={{ color: "var(--text-muted)" }}>
+        {card.quotes[0].text}
+      </p>
+      <p className="text-xs font-medium" style={{ color: accent }}>— {card.quotes[0].name}</p>
 
       {/* Decorative glow */}
       <div
@@ -97,10 +87,10 @@ export default function SocialProof({ c }: { c: Content["social"] }) {
   );
 
   return (
-    <section ref={sectionRef} className="py-28 px-6">
+    <section ref={sectionRef} className="py-14 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-8">
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-4"
             style={{ color: "var(--accent-blue)", fontFamily: "var(--font-space-grotesk)" }}
