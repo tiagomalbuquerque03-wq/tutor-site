@@ -75,15 +75,15 @@ function ChatCard({
   side: "left" | "right";
 }) {
   const isLeft = side === "left";
-  const accent = isLeft ? "#EF4444" : "#3A82FF";
-  const accentSub = isLeft ? "rgba(239,68,68,0.08)" : "rgba(58,130,255,0.08)";
+  const accent = isLeft ? "#EF4444" : "#6366F1";
+  const accentSub = isLeft ? "rgba(239,68,68,0.08)" : "rgba(99,102,241,0.08)";
   const borderClass = isLeft ? "gradient-border-red" : "gradient-border-blue";
 
   return (
     <div
       className={`flex-1 rounded-2xl overflow-hidden ${borderClass}`}
       style={{
-        background: isLeft ? "rgba(239,68,68,0.04)" : "rgba(58,130,255,0.04)",
+        background: isLeft ? "rgba(239,68,68,0.04)" : "rgba(99,102,241,0.04)",
       }}
     >
       {/* Header */}
@@ -118,13 +118,13 @@ function ChatCard({
               style={
                 msg.role === "user"
                   ? {
-                      background: "rgba(255,255,255,0.06)",
+                      background: "rgba(0,0,0,0.05)",
                       color: "var(--text-muted)",
                       borderBottomRightRadius: 4,
                     }
                   : {
                       background: accentSub,
-                      color: isLeft ? "#FCA5A5" : "#93C5FD",
+                      color: isLeft ? "#B91C1C" : "#4338CA",
                       borderBottomLeftRadius: 4,
                       border: `1px solid ${accent}20`,
                     }
@@ -190,7 +190,7 @@ export default function Comparison({ lang }: Props) {
       />
       <div
         className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(58,130,255,0.08) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)" }}
       />
 
       <div className="max-w-7xl mx-auto">
@@ -234,9 +234,9 @@ export default function Comparison({ lang }: Props) {
         {/* Research note */}
         <div
           className="flex items-start gap-3 px-5 py-4 rounded-xl max-w-xl"
-          style={{ background: "rgba(58,130,255,0.06)", border: "1px solid rgba(58,130,255,0.15)" }}
+          style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.1)" }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5" stroke="#60A5FA" strokeWidth="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5" stroke="#6366F1" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
             <line x1="12" y1="16" x2="12.01" y2="16" />

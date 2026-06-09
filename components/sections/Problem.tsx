@@ -86,9 +86,9 @@ export default function Problem({ c }: { c: Content["problem"] }) {
               <div
                 className="w-11 h-11 rounded-xl flex items-center justify-center mb-6"
                 style={{
-                  background: "rgba(58,130,255,0.1)",
+                  background: "rgba(99,102,241,0.1)",
                   color: "var(--accent-blue)",
-                  border: "1px solid rgba(58,130,255,0.2)",
+                  border: "1px solid rgba(99,102,241,0.18)",
                 }}
               >
                 {iconMap[item.icon]}
@@ -107,7 +107,7 @@ export default function Problem({ c }: { c: Content["problem"] }) {
               {/* Subtle hover glow */}
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ background: "radial-gradient(ellipse at top left, rgba(58,130,255,0.06) 0%, transparent 60%)" }}
+                style={{ background: "radial-gradient(ellipse at top left, rgba(99,102,241,0.05) 0%, transparent 60%)" }}
               />
             </div>
           ))}

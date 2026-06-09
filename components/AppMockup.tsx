@@ -69,7 +69,7 @@ export default function AppMockup({ lang = "pt" }: { lang?: Lang }) {
       {/* Glow */}
       <div
         className="absolute inset-0 rounded-[2.5rem] blur-3xl opacity-40"
-        style={{ background: "radial-gradient(ellipse, rgba(58,130,255,0.35) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(99,102,241,0.35) 0%, transparent 70%)" }}
       />
 
       {/* Phone frame */}
@@ -153,20 +153,20 @@ export default function AppMockup({ lang = "pt" }: { lang?: Lang }) {
           <div
             className="mx-3 rounded-xl overflow-hidden flex-1 flex flex-col"
             style={{
-              background: "rgba(58,130,255,0.06)",
-              border: "1px solid rgba(58,130,255,0.25)",
+              background: "rgba(99,102,241,0.12)",
+              border: "1px solid rgba(99,102,241,0.3)",
               animation: "fadeUp 0.35s ease-out",
             }}
           >
             <div
               className="px-3 py-2 flex items-center gap-1.5 shrink-0"
-              style={{ borderBottom: "1px solid rgba(58,130,255,0.15)" }}
+              style={{ borderBottom: "1px solid rgba(99,102,241,0.18)" }}
             >
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ background: "var(--accent-blue)", boxShadow: "0 0 6px rgba(58,130,255,0.8)" }}
+                style={{ background: "var(--accent-blue)", boxShadow: "0 0 6px rgba(99,102,241,0.8)" }}
               />
-              <span className="text-[10px] font-semibold tracking-wide" style={{ color: "#60A5FA", fontFamily: "var(--font-space-grotesk)" }}>
+              <span className="text-[10px] font-semibold tracking-wide" style={{ color: "#818CF8", fontFamily: "var(--font-space-grotesk)" }}>
                 {c.tutorLabel}
               </span>
             </div>
@@ -183,7 +183,7 @@ export default function AppMockup({ lang = "pt" }: { lang?: Lang }) {
                       style={
                         msg.role === "user"
                           ? { background: "rgba(255,255,255,0.08)", color: "var(--text-muted)" }
-                          : { background: "rgba(58,130,255,0.2)", color: "#BAD4FF", borderBottomLeftRadius: 4 }
+                          : { background: "rgba(99,102,241,0.22)", color: "#C7D2FE", borderBottomLeftRadius: 4 }
                       }
                     >
                       {msg.text}

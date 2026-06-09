@@ -57,7 +57,7 @@ export default function Editorial({ lang }: Props) {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, rgba(6,9,15,0.72) 0%, rgba(6,9,15,0.45) 50%, rgba(58,130,255,0.08) 100%)",
+            "linear-gradient(135deg, rgba(6,9,15,0.72) 0%, rgba(6,9,15,0.45) 50%, rgba(99,102,241,0.08) 100%)",
         }}
       />
       <div
@@ -74,9 +74,9 @@ export default function Editorial({ lang }: Props) {
         <span
           className="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1.5 rounded-full mb-8 self-start"
           style={{
-            background: "rgba(58,130,255,0.12)",
-            border: "1px solid rgba(58,130,255,0.25)",
-            color: "#60A5FA",
+            background: "rgba(99,102,241,0.12)",
+            border: "1px solid rgba(99,102,241,0.3)",
+            color: "#818CF8",
             fontFamily: "var(--font-space-grotesk)",
           }}
         >

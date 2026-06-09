@@ -111,7 +111,7 @@ export default function SocialProof({ c }: { c: Content["social"] }) {
 
         {/* Cards */}
         <div className="flex flex-col md:flex-row gap-6">
-          {renderCard(c.studentCard, "#3A82FF", "rgba(58,130,255,0.06)")}
+          {renderCard(c.studentCard, "#6366F1", "rgba(99,102,241,0.06)")}
           {renderCard(c.parentCard, "#10B981", "rgba(16,185,129,0.06)")}
         </div>
       </div>

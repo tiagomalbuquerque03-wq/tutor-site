@@ -78,9 +78,9 @@ export default function Pricing({ c }: { c: Content["pricing"] }) {
               style={
                 plan.highlight
                   ? {
-                      background: "linear-gradient(135deg, rgba(58,130,255,0.15) 0%, rgba(58,130,255,0.05) 100%)",
-                      border: "1px solid rgba(58,130,255,0.4)",
-                      boxShadow: "0 0 40px rgba(58,130,255,0.1)",
+                      background: "linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.05) 100%)",
+                      border: "1px solid rgba(99,102,241,0.3)",
+                      boxShadow: "0 0 40px rgba(99,102,241,0.08)",
                     }
                   : {
                       background: "var(--bg-card)",
@@ -106,7 +106,7 @@ export default function Pricing({ c }: { c: Content["pricing"] }) {
                 <p
                   className="text-sm font-semibold mb-3"
                   style={{
-                    color: plan.highlight ? "#60A5FA" : "var(--text-muted)",
+                    color: plan.highlight ? "#6366F1" : "var(--text-muted)",
                     fontFamily: "var(--font-space-grotesk)",
                   }}
                 >
@@ -155,7 +155,7 @@ export default function Pricing({ c }: { c: Content["pricing"] }) {
                         background: "var(--accent-blue)",
                         color: "#fff",
                         fontFamily: "var(--font-space-grotesk)",
-                        boxShadow: "0 4px 16px rgba(58,130,255,0.3)",
+                        boxShadow: "0 4px 16px rgba(99,102,241,0.25)",
                         display: "block",
                       }
                     : {

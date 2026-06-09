@@ -68,16 +68,16 @@ export default function Features({ c }: { c: Content["features"] }) {
               <div className="flex items-center justify-between">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "rgba(58,130,255,0.1)", color: "#60A5FA" }}
+                  style={{ background: "rgba(99,102,241,0.1)", color: "#6366F1" }}
                 >
                   {icons[i]}
                 </div>
                 <span
                   className="text-xs font-semibold px-2.5 py-1 rounded-full"
                   style={{
-                    background: "rgba(58,130,255,0.08)",
-                    color: "#60A5FA",
-                    border: "1px solid rgba(58,130,255,0.18)",
+                    background: "rgba(99,102,241,0.08)",
+                    color: "#6366F1",
+                    border: "1px solid rgba(99,102,241,0.2)",
                     fontFamily: "var(--font-space-grotesk)",
                   }}
                 >
