@@ -245,7 +245,7 @@ export default function Navbar({
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                   <input
-                    type="email"
+                    type="tel"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
