@@ -13,9 +13,11 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export default function DownloadCTA({
   c,
   lang,
+  basePath = "",
 }: {
   c: Content["cta"];
   lang: "pt" | "en";
+  basePath?: string;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [phone, setPhone] = useState("");
@@ -115,6 +117,23 @@ export default function DownloadCTA({
                 ✓ {c.iosAppStore}
               </span>
             </div>
+
+            {/* QR code */}
+            <a
+              href={c.iosUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-105 active:scale-95"
+            >
+              <img
+                src={`${basePath}/qr-ios.png`}
+                alt="QR Code App Store"
+                width={160}
+                height={160}
+                style={{ borderRadius: 12, border: "2px solid rgba(255,255,255,0.1)", display: "block" }}
+              />
+            </a>
+            <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>{c.iosScan}</p>
 
             <a
               href={c.iosUrl}

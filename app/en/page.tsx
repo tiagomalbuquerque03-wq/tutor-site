@@ -28,7 +28,7 @@ export default function EnglishPage() {
       <Features c={c.features} />
       <SocialProof c={c.social} />
       <FAQ c={c.faq} />
-      <DownloadCTA c={c.cta} lang="en" />
+      <DownloadCTA c={c.cta} lang="en" basePath={basePath} />
       <Footer c={c.footer} />
     </main>
   );

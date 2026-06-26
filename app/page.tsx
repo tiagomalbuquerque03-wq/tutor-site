@@ -20,7 +20,7 @@ export default function Home() {
       <Features c={c.features} />
       <SocialProof c={c.social} />
       <FAQ c={c.faq} />
-      <DownloadCTA c={c.cta} lang="pt" />
+      <DownloadCTA c={c.cta} lang="pt" basePath={basePath} />
       <Footer c={c.footer} />
     </main>
   );

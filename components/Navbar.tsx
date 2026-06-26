@@ -194,14 +194,29 @@ export default function Navbar({
             </div>
 
             {platform === "ios" ? (
-              /* iOS — App Store link */
-              <div className="flex flex-col items-center gap-4 py-4">
+              /* iOS — QR + App Store link */
+              <div className="flex flex-col items-center gap-4 py-2">
                 <span
                   className="text-xs font-semibold px-3 py-1 rounded-full"
                   style={{ background: "rgba(34,197,94,0.12)", color: "#4ADE80", border: "1px solid rgba(34,197,94,0.2)" }}
                 >
                   ✓ {cta.iosAppStore}
                 </span>
+                <a
+                  href={cta.iosUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105 active:scale-95"
+                >
+                  <img
+                    src={`${basePath}/qr-ios.png`}
+                    alt="QR Code App Store"
+                    width={148}
+                    height={148}
+                    style={{ borderRadius: 10, border: "2px solid rgba(255,255,255,0.1)", display: "block" }}
+                  />
+                </a>
+                <p className="text-xs" style={{ color: "var(--text-muted)" }}>{cta.iosScan}</p>
                 <a
                   href={cta.iosUrl}
                   target="_blank"
