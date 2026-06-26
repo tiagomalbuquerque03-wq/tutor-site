@@ -110,12 +110,6 @@ export default function DownloadCTA({
               >
                 {c.iosLabel}
               </span>
-              <span
-                className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                style={{ background: "rgba(34,197,94,0.12)", color: "#4ADE80", border: "1px solid rgba(34,197,94,0.2)" }}
-              >
-                ✓ {c.iosAppStore}
-              </span>
             </div>
 
             {/* QR code */}
