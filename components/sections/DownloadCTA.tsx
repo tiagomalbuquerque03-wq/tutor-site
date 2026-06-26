@@ -133,8 +133,6 @@ export default function DownloadCTA({
                 style={{ borderRadius: 12, border: "2px solid rgba(255,255,255,0.1)", display: "block" }}
               />
             </a>
-            <p className="text-xs text-center" style={{ color: "var(--text-muted)" }}>{c.iosScan}</p>
-
             <a
               href={c.iosUrl}
               target="_blank"
